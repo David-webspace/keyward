@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Shell } from "@/components/Shell";
 import { apiGet } from "@/lib/api";
-import { account, day } from "@/lib/format";
+import { account, dateTime, day } from "@/lib/format";
 import type { Findings } from "@/lib/types";
 
 export default async function FindingsPage({ searchParams }: PageProps<"/findings">) {
@@ -15,7 +15,13 @@ export default async function FindingsPage({ searchParams }: PageProps<"/finding
   const q = (r: string | null) => `/findings?${new URLSearchParams({ ...(r ? { rule: r } : {}), ...(asOf ? { as_of: asOf } : {}) })}`;
 
   return (
-    <Shell title="發現" lead={<>依 policy.yaml 加上已套用的規則提案判定，判定本身不經過模型。快照 <span className="num">{data.snapshot}</span>，基準日 <span className="num">{day(data.as_of)}</span>{data.suppressed > 0 && `；${data.suppressed} 項因主管已核准保留而未列出`}。</>}>
+    <Shell title="發現" lead={<>
+      系統依目前的權限規則，找出不該存在的帳號與存取權。判斷完全由規則決定，不經過 AI。
+      <span className="mt-1 block text-sm">
+        資料更新於 <span className="num">{dateTime(data.taken_at)}</span>，以 <span className="num">{day(data.as_of)}</span> 為判斷日期
+        {data.suppressed > 0 && <>；另有 {data.suppressed} 項主管已決定保留，到期前不列出</>}。
+      </span>
+    </>}>
       <nav className="flex flex-wrap gap-2">
         <Link href={q(null)} className={`rounded-full border px-3 py-1 text-xs ${!rule ? "border-brass bg-brass-wash" : "border-rule bg-tag"}`}>
           全部 <span className="num">{data.items.length}</span>

@@ -14,7 +14,10 @@ export default async function PolicyPage() {
     .sort((a, b) => Number(b.proposal.sensitivity === "restricted") - Number(a.proposal.sensitivity === "restricted"));
   const applied = s.proposals.filter((p) => p.status === "applied");
   return (
-    <Shell title="規則" lead={<>基礎規則在 policy.yaml。這裡的提案由 AI 產生，經程式驗證與影響預覽，<b className="font-medium text-ink">IT 按下套用才會生效</b>，隨時可以撤回。模型不參與任何「誰該撤權」的判斷。</>}>
+    <Shell title="規則" lead={<>
+      這裡決定系統用什麼標準找問題。除了公司預設的規則，你可以用一句話新增規則，或請 AI 替還沒分類的群組判斷敏感度。
+      <span className="mt-1 block text-sm">AI 只會提出建議，並先試算套用後會多出哪些問題；<b className="font-medium text-ink">要你按「套用」才會生效</b>，之後也隨時可以撤回。誰該被撤權，仍然只由規則和主管決定。</span>
+    </>}>
       {s.ai_message && <p role="status" className="mb-5 rounded-md border border-brass bg-brass-wash px-4 py-2 text-sm break-words">{s.ai_message}</p>}
       <div className="grid gap-8 lg:grid-cols-2">
         <section className="min-w-0">
@@ -40,7 +43,8 @@ export default async function PolicyPage() {
         </section>
       </div>
       <section className="mt-10 border-t border-rule pt-6">
-        <h2 className="font-medium">已生效的規則（疊加在 policy.yaml 上）</h2>
+        <h2 className="font-medium">你套用過的規則</h2>
+        <p className="mt-1 text-sm text-muted">這些規則加在公司預設規則之上，撤回後就恢復原狀。</p>
         {applied.length === 0 ? <p className="mt-2 text-sm text-muted">還沒有套用任何提案。</p> : (
           <ul className="mt-3 grid gap-3 lg:grid-cols-2">
             {applied.map((p) => <li key={p.id} className="min-w-0"><ProposalCard p={p} /></li>)}

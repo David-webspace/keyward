@@ -40,7 +40,7 @@ export function RuleDraft({ disabled }: { disabled: boolean }) {
       <button disabled={busy || disabled} className="mt-3 rounded-sm bg-cabinet px-4 py-1.5 text-sm text-white hover:bg-ink disabled:opacity-50">
         {busy ? "轉換並預覽影響中…" : "轉成規則草稿"}
       </button>
-      <p className="mt-2 text-xs break-words text-muted">草稿會先經程式驗證，並用最新同步預覽套用後會多出哪些發現；按「套用」才會生效。</p>
+      <p className="mt-2 text-xs break-words text-muted">送出後會先檢查內容是否正確，並試算套用後會多出哪些問題；按「套用」才會生效。</p>
     </form>
   );
 }

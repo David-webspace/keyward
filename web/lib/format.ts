@@ -19,6 +19,11 @@ export function day(iso: string | null | undefined): string {
   return d.toLocaleDateString("zh-TW", { timeZone: "Asia/Taipei", year: "numeric", month: "2-digit", day: "2-digit" });
 }
 
+export function dateTime(iso: string): string {
+  const d = new Date(iso.endsWith("Z") || iso.includes("+") ? iso : `${iso}Z`);
+  return d.toLocaleString("zh-TW", { timeZone: "Asia/Taipei", month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: false });
+}
+
 export const DECISION_LABEL = { keep: "保留", revoke: "撤銷", partial: "部分撤銷" } as const;
 
 // 外部來賓的 UPN 長這樣：james.davis_kestrel-audit.example#EXT#@arcwell.example，顯示時還原成對方原本的 Email
