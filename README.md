@@ -4,6 +4,17 @@
 
 所有資料都是虛構的（Arcwell Electronics，約 650 人），Microsoft Graph 與 GitHub 由本機 mock 提供，**不需要任何雲端帳號就能完整跑起來**。
 
+![主管的覆核頁：每個項目是一張鑰匙吊牌，決定後蓋上「撤銷」「保留」或「部分撤銷」](docs/screenshots/reviews-decided.png)
+
+<sub>主管的「我的覆核」：系統用白話說明為什麼要覆核，主管決定保留或撤銷；權限明顯多於同事的人，可以逐個群組決定。</sub>
+
+| | |
+|---|---|
+| ![規則頁：AI 把一句話轉成規則，並試算套用後會多出哪些問題](docs/screenshots/policy.png) | ![活動頁：依類型看進度、還在等誰、交付執行、下載證據包](docs/screenshots/campaign.png) |
+| **規則**：一句話轉成規則並預覽影響；右邊是一筆被程式擋下的 AI 建議（把「CRM」當成部門代碼）。 | **覆核活動**：137 個項目的進度、還在等誰、提醒與升級、交付執行、稽核證據包。 |
+| ![查人：一個人在各系統的權限，以及間接權限經由哪個群組取得](docs/screenshots/person.png) | ![發現：依規則分類的所有問題](docs/screenshots/findings.png) |
+| **查人**：轉調後還留在舊單位群組，因此間接拿到人事檔案與薪資資料。 | **發現**：依規則分類的所有問題，判斷不經過 AI。 |
+
 ## 快速開始
 
 需要：[Docker Desktop](https://www.docker.com/products/docker-desktop/)（macOS、Windows、Linux 皆可）。
