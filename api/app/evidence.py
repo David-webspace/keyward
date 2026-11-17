@@ -12,7 +12,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.execute import Ledger
-from app.models import Campaign, Event, Mail, ReviewException, ReviewItem
+from app.models import Campaign, Event, Mail, Proposal, ReviewException, ReviewItem
 from app.review import RULE_ZH, Org
 
 
@@ -48,6 +48,8 @@ def build(db: Session, cid: int, org: Org, policy_text: str) -> tuple[str, bytes
                               "approved_by": who((a.approval or {}).get("by")) or (a.approval or {}).get("by"),
                               "approved_via": (a.approval or {}).get("via"),
                               "events": " → ".join(h["event"] for h in a.history)})
+    changes = db.scalars(select(Proposal).where(Proposal.status.in_(("applied", "reverted", "rejected")))
+                         .order_by(Proposal.decided_at)).all()
     policy_hash = hashlib.sha256(policy_text.encode()).hexdigest()[:16]
     decisions = Counter(i.decision or i.status for i in items)
     summary = "\n".join([
@@ -64,7 +66,8 @@ def build(db: Session, cid: int, org: Org, policy_text: str) -> tuple[str, bytes
         "- exceptions.csv：決定保留而建立的例外與到期日",
         "- events.csv：依時間排列的完整事件紀錄",
         "- mails.csv：寄出的通知信", "- direct.csv：不需覆核的項目",
-        "- execution.csv：交付執行後每個動作的狀態與核准來源", "- policy.yaml：當時使用的規則",
+        "- execution.csv：交付執行後每個動作的狀態與核准來源", "- policy.yaml：基礎規則",
+        f"- policy_changes.csv：疊加在 policy.yaml 上的規則提案（來源、AI 模型、原始輸入、核准者），共 {len(changes)} 筆",
     ]) + "\n"
     files = {
         "summary.md": summary,
@@ -82,6 +85,12 @@ def build(db: Session, cid: int, org: Org, policy_text: str) -> tuple[str, bytes
         "execution.csv": _csv(execution, ["action_id", "fix", "account", "object", "status", "approved_by",
                                           "approved_via", "events"]),
         "policy.yaml": policy_text,
+        "policy_changes.csv": _csv([{"id": c.id, "status": c.status, "source": c.source, "kind": c.kind, "input": c.prompt,
+                                     "proposal": json.dumps(c.proposal, ensure_ascii=False), "rationale": c.rationale,
+                                     "model": c.model, "proposed_by": who(c.created_by), "decided_by": who(c.decided_by),
+                                     "decided_at": c.decided_at} for c in changes],
+                                   ["id", "status", "source", "kind", "input", "proposal", "rationale", "model",
+                                    "proposed_by", "decided_by", "decided_at"]),
     }
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as z:

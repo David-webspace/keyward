@@ -146,6 +146,35 @@ MISC_GROUPS = [
     ("Temp-Audit-2025", ""), ("SG-Kiosk-Devices", "產線共用機台"), ("SG-Mobile-Devices", "公務手機"),
 ]
 
+# 群組的真實擁有部門與敏感度：AI 群組標註的標準答案（只涵蓋 policy.yaml 與組織群組以外的群組）
+# restricted = 外流會造成財務、法律、個資或商業機密損害；internal = 公司內部使用；general = 一般用途
+RESTRICTED_THEMES = {"Budget-2027", "Transfer-Pricing", "Audit-FY2025", "Talent-Review-2026", "Export-Control-Review",
+                     "Pricing-Review-2027"}
+OTHER_GROUP_TRUTH = {
+    "APP-VPN": ("IT", "general"), "APP-ERP-Users": ("IT", "internal"), "APP-PLM": ("RDHW", "internal"),
+    "APP-EDA-Licenses": ("RDHW", "internal"), "APP-CRM": ("SALES", "internal"), "APP-Admin-Portal": ("IT", "restricted"),
+    "TMP-CBI-Launch": ("MFG", "internal"),
+    "DL-All-Arcwell": ("HR", "general"), "SG-Printers-TPE": ("IT", "general"), "SG-Printers-HSC": ("IT", "general"),
+    "Club-Taipei-Badminton": ("HR", "general"), "Club-Hsinchu-Running": ("HR", "general"),
+    "M365-Copilot-Pilot": ("IT", "internal"), "Legacy-Lotus-Migration": ("IT", "general"), "Test-Group-1": ("IT", "general"),
+    "Test-Group-2": ("IT", "general"), "Old-SharePoint-Owners": ("IT", "general"), "EXT-Auditors": ("QA", "internal"),
+    "EXT-Firmware-Partners": ("RDFW", "internal"), "EXT-Logistics-Partners": ("WH", "internal"),
+    "EXT-Customer-Portal": ("SALES", "internal"), "SG-Visitors-TPE": ("HR", "general"),
+    "Training-ISO27001-2026": ("IT", "internal"), "Training-Safety-TYN": ("MFG", "internal"),
+    "Committee-Welfare": ("HR", "general"), "Committee-ESG": ("EXEC", "internal"), "SG-Remote-Workers": ("IT", "internal"),
+    "SG-Laptop-Pilot": ("IT", "internal"), "SG-Intern-2026": ("HR", "internal"), "Temp-Audit-2025": ("FIN", "restricted"),
+    "SG-Kiosk-Devices": ("IT", "internal"), "SG-Mobile-Devices": ("IT", "internal"),
+}
+
+
+def group_truth(prj_by_dept: dict[str, list[str]]) -> dict[str, dict]:
+    out = {g: {"owner_dept": d, "sensitivity": s} for g, (d, s) in OTHER_GROUP_TRUTH.items()}
+    for d, groups in prj_by_dept.items():
+        for g in groups:
+            out[g] = {"owner_dept": d, "sensitivity": "restricted" if g.split("-", 2)[2] in RESTRICTED_THEMES else "internal"}
+    return out
+
+
 GUEST_COMPANIES = [
     ("kestrel-audit.example", "外部稽核", "QA", 8), ("brightline-design.example", "外包設計", "RDHW", 8),
     ("deltacore-fw.example", "韌體外包", "RDFW", 10), ("sunfield-logistics.example", "物流", "WH", 8),
@@ -160,6 +189,7 @@ def oid(kind: str, key: str) -> str:
 
 class Gen:
     def __init__(self, seed: int):
+        self.seed = seed
         self.rng = random.Random(seed)
         self.emails: set[str] = set()
         self.ids = iter(self.rng.sample(range(10001, 39999), 2000))
@@ -663,6 +693,19 @@ class Gen:
                 if kind != "ok":
                     self.issue("guest_access", "entra", upn, "remove_guest", reason=kind, mail=mail)
 
+        # 現行規則看不到的問題：客戶端的外部來賓被加進了內部的報價審查專案。
+        # 這個群組不在 policy.yaml 裡，要等 AI 把它標成限制級、IT 核准後才抓得到。用獨立亂數，不影響其他資料
+        r2 = random.Random(self.seed + 1)
+        self.group_truth = group_truth(prj_by_dept)
+        pricing = next(g for g in prj_by_dept["SALES"] if g.endswith("Pricing-Review-2027"))
+        customers = [u for d in ("novaterm.example", "helios-power.example") for u in self.guests_by_domain[d]
+                     if self.guest_kind[u["mail"]] == "ok" and ("user", u["id"]) not in members[pricing]]
+        self.hidden_issues = []
+        for u in r2.sample(customers, 3):
+            members[pricing].append(("user", u["id"]))
+            self.hidden_issues.append({"type": "guest_resource", "system": "entra", "account": u["userPrincipalName"],
+                                       "fix": "remove_group_member", "object": pricing})
+
         # 目錄角色
         role_defs = [{"id": rid, "templateId": rid, "displayName": name, "isBuiltIn": True} for name, rid in ROLE_IDS.items()]
         assignments = []
@@ -821,7 +864,8 @@ class Gen:
                     "assignments": [{"user_id": u, "role": ro} for u, rs in sorted(self.erp_roles.items()) for ro in rs]},
             "mitigations": self.mitigations, "guest_register": self.guest_register,
             "service_accounts": self.service_accounts, "github_links": self.github_links,
-            "ground_truth": {"as_of": str(AS_OF), "issues": self.issues, "distractors": self.distractors},
+            "ground_truth": {"as_of": str(AS_OF), "issues": self.issues, "distractors": self.distractors,
+                             "groups": self.group_truth, "hidden_issues": self.hidden_issues},
         }
 
 

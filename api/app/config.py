@@ -24,6 +24,13 @@ class Settings(BaseSettings):
     mail_from: str = "keyward@arcwell.example"
     allowed_recipient_suffix: str = ".example"
 
+    # 模型：只用在「規則提案」（群組標註、一句話寫規則），不參與任何撤權判斷。沒設定就停用這兩個功能
+    llm_provider: str | None = None  # anthropic / openai_compatible（Ollama、vLLM、Azure OpenAI）
+    llm_base_url: str | None = None
+    llm_model: str | None = None
+    llm_api_key: str | None = None
+    llm_reasoning_effort: str | None = None
+
 
 @lru_cache
 def get_settings() -> Settings:

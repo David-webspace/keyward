@@ -18,14 +18,16 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from app import evidence, people
+from app import evidence, people, proposals
+from app.ai import draft_rule
 from app.config import Settings, get_settings
 from app.db import get_db
 from app.execute import Ledger
 from app.findings import evaluate
 from app.internal import load
+from app.llm import LLM, make_llm, not_configured
 from app.mailer import Mailer
-from app.models import Campaign, ReviewItem, utcnow
+from app.models import Campaign, Proposal, ReviewItem, utcnow
 from app.review import (
     RULE_ZH,
     Org,
@@ -39,6 +41,7 @@ from app.review import (
     tick,
     visible_item,
 )
+from app.rules import effective
 
 COOKIE = "keyward_session"
 
@@ -168,7 +171,7 @@ def new_campaign(body: NewCampaign, emp: str = Depends(admin_user), db: Session 
                  m: Mailer = Depends(mailer), s: Settings = Depends(get_settings)):
     path, snapshot = latest_snapshot(s)
     as_of = body.as_of or date.today()
-    findings = evaluate(snapshot, org().internal, as_of)
+    findings = evaluate(snapshot, org().internal, as_of, effective(db))
     c = create_campaign(db, body.name, snapshot, str(path), findings, org(), m, as_of, utcnow(), emp)
     return {"id": c.id, **progress(db, c.id), "direct": len(c.direct), "suppressed": c.suppressed}
 
@@ -230,7 +233,7 @@ def findings(as_of: date | None = None, _: str = Depends(admin_user), db: Sessio
              s: Settings = Depends(get_settings)):
     path, snapshot = latest_snapshot(s)
     day = as_of or date.today()
-    raw = evaluate(snapshot, org().internal, day)
+    raw = evaluate(snapshot, org().internal, day, effective(db))
     kept, suppressed = apply_exceptions(raw, active_exceptions(db, day))
     o = org()
     return {"snapshot": path.name, "taken_at": snapshot["taken_at"], "as_of": day, "suppressed": suppressed,
@@ -253,10 +256,11 @@ def search_people(q: str = "", _: str = Depends(admin_user)):
 
 
 @app.get("/people/{emp}")
-def person(emp: str, as_of: date | None = None, _: str = Depends(admin_user), s: Settings = Depends(get_settings)):
+def person(emp: str, as_of: date | None = None, _: str = Depends(admin_user), s: Settings = Depends(get_settings),
+           db: Session = Depends(get_db)):
     _, snapshot = latest_snapshot(s)
     o = org()
-    result = people.profile(emp, snapshot, o.ident, evaluate(snapshot, o.internal, as_of or date.today()))
+    result = people.profile(emp, snapshot, o.ident, evaluate(snapshot, o.internal, as_of or date.today(), effective(db)))
     if result is None:
         raise HTTPException(404, "找不到這位員工")
     return result
@@ -321,3 +325,64 @@ class Decision(BaseModel):
 def make_decision(item_id: int, body: Decision, emp: str = Depends(current_user), db: Session = Depends(get_db)):
     it = decide(db, item_id, emp, org(), utcnow(), body.decision, body.reason, body.keep_until, body.groups)
     return item_view(it)
+
+
+# ---------- 規則提案（AI 群組標註、一句話寫規則） ----------
+
+def get_llm(s: Settings = Depends(get_settings)) -> LLM:
+    msg = not_configured(s)
+    if msg:
+        raise HTTPException(503, msg)
+    return make_llm(s)
+
+
+@app.get("/policy")
+def policy(_: str = Depends(admin_user), db: Session = Depends(get_db), s: Settings = Depends(get_settings)):
+    _, snapshot = latest_snapshot(s)
+    rows = db.scalars(select(Proposal).order_by(Proposal.id.desc()).limit(300)).all()
+    return {"ai_message": not_configured(s), "model": s.llm_model,
+            "unlabeled": len(proposals.unlabeled_groups(db, snapshot)), "proposals": [proposals.view(p) for p in rows]}
+
+
+class Sentence(BaseModel):
+    text: str = Field(min_length=4, max_length=300)
+    as_of: date | None = None
+
+
+@app.post("/policy/drafts")
+def new_draft(body: Sentence, emp: str = Depends(admin_user), db: Session = Depends(get_db),
+              s: Settings = Depends(get_settings), llm: LLM = Depends(get_llm)):
+    _, snapshot = latest_snapshot(s)
+    internal = org().internal
+    draft = draft_rule(llm, body.text.strip(), proposals.vocab_for(snapshot, internal))
+    p = proposals.create(db, draft, "sentence", body.text.strip(), draft.proposal.get("group") or draft.proposal.get("key")
+                         or "", emp, snapshot, internal, body.as_of or date.today(), utcnow())
+    return proposals.view(p)
+
+
+class Suggest(BaseModel):
+    limit: int = Field(default=5, ge=1, le=20)  # 每次最多標註 20 個群組，避免單一請求跑太久、模型費用失控
+    as_of: date | None = None
+
+
+@app.post("/policy/groups/suggest")
+def suggest(body: Suggest, emp: str = Depends(admin_user), db: Session = Depends(get_db),
+            s: Settings = Depends(get_settings), llm: LLM = Depends(get_llm)):
+    _, snapshot = latest_snapshot(s)
+    made = proposals.suggest_groups(db, llm, body.limit, emp, snapshot, org().internal, body.as_of or date.today(), utcnow())
+    return {"made": [proposals.view(p) for p in made], "remaining": len(proposals.unlabeled_groups(db, snapshot))}
+
+
+class ProposalAction(BaseModel):
+    edits: dict | None = None
+    as_of: date | None = None
+
+
+@app.post("/policy/proposals/{pid}/{action}")
+def proposal_action(pid: int, action: str, body: ProposalAction, emp: str = Depends(admin_user),
+                    db: Session = Depends(get_db), s: Settings = Depends(get_settings)):
+    if action not in ("apply", "reject", "revert"):
+        raise HTTPException(404, "Not Found")
+    _, snapshot = latest_snapshot(s)
+    p = proposals.decide(db, pid, emp, action, utcnow(), snapshot, org().internal, body.as_of or date.today(), body.edits)
+    return proposals.view(p)

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Shell } from "@/components/Shell";
 import { apiGet } from "@/lib/api";
-import { day } from "@/lib/format";
+import { account, day } from "@/lib/format";
 import type { Findings } from "@/lib/types";
 
 export default async function FindingsPage({ searchParams }: PageProps<"/findings">) {
@@ -15,7 +15,7 @@ export default async function FindingsPage({ searchParams }: PageProps<"/finding
   const q = (r: string | null) => `/findings?${new URLSearchParams({ ...(r ? { rule: r } : {}), ...(asOf ? { as_of: asOf } : {}) })}`;
 
   return (
-    <Shell title="發現" lead={<>依 policy.yaml 的規則判定，不經過模型。快照 <span className="num">{data.snapshot}</span>，基準日 <span className="num">{day(data.as_of)}</span>{data.suppressed > 0 && `；${data.suppressed} 項因主管已核准保留而未列出`}。</>}>
+    <Shell title="發現" lead={<>依 policy.yaml 加上已套用的規則提案判定，判定本身不經過模型。快照 <span className="num">{data.snapshot}</span>，基準日 <span className="num">{day(data.as_of)}</span>{data.suppressed > 0 && `；${data.suppressed} 項因主管已核准保留而未列出`}。</>}>
       <nav className="flex flex-wrap gap-2">
         <Link href={q(null)} className={`rounded-full border px-3 py-1 text-xs ${!rule ? "border-brass bg-brass-wash" : "border-rule bg-tag"}`}>
           全部 <span className="num">{data.items.length}</span>
@@ -38,7 +38,7 @@ export default async function FindingsPage({ searchParams }: PageProps<"/finding
                 <td className="px-3 py-2">
                   {f.employee_id ? <Link href={`/people/${f.employee_id}`} className="underline decoration-rule underline-offset-4 hover:decoration-brass">{f.name}</Link> : <span className="text-muted">—</span>}
                 </td>
-                <td className="num px-3 py-2 text-xs break-all">{f.account}{f.object && <span className="block text-muted">{f.object}</span>}</td>
+                <td className="num px-3 py-2 text-xs break-all">{account(f.account)}{f.object && <span className="block text-muted">{f.object}</span>}</td>
                 <td className="px-3 py-2 text-xs text-muted">{f.system}</td>
               </tr>
             ))}

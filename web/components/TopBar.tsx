@@ -7,7 +7,7 @@ export async function TopBar() {
   const me = await apiGet<Me>("/me");
   const links = [{ href: "/reviews", label: "我的覆核" }];
   if (me.is_admin) {
-    links.push({ href: "/campaigns", label: "覆核活動" }, { href: "/findings", label: "發現" }, { href: "/people", label: "查人" });
+    links.push({ href: "/campaigns", label: "覆核活動" }, { href: "/findings", label: "發現" }, { href: "/policy", label: "規則" }, { href: "/people", label: "查人" });
   }
   return (
     <header className="bg-cabinet text-white">

@@ -115,3 +115,26 @@ export type Profile = {
   erp: { role: string; transactions: string[] }[];
   findings: { rule: string; system: string; account: string; object: string; fix: string }[];
 };
+
+export type ImpactRow = { rule: string; account: string; object: string; name: string | null };
+
+export type Proposal = {
+  id: number;
+  source: "classifier" | "sentence";
+  kind: "group_label" | "resource" | "sod" | "setting" | "clarify";
+  prompt: string;
+  target: string;
+  proposal: Record<string, unknown>;
+  rationale: string | null;
+  evidence: string[];
+  errors: string[];
+  impact: { added: number; removed: number; added_rows: ImpactRow[]; removed_rows: ImpactRow[] } | null;
+  model: string | null;
+  elapsed_ms: number;
+  status: "proposed" | "invalid" | "clarify" | "applied" | "rejected" | "reverted";
+  created_at: string;
+  decided_by: string | null;
+  decided_at: string | null;
+};
+
+export type PolicyState = { ai_message: string | null; model: string | null; unlabeled: number; proposals: Proposal[] };

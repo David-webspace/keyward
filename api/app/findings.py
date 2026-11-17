@@ -115,6 +115,17 @@ def evaluate(snapshot: dict, internal: Internal, as_of: date, policy: dict = POL
             if reason:
                 out.append(Finding("guest_access", "entra", upn, "remove_guest", evidence={"reason": reason, "register": reg and
                                                                                              {k: str(v) for k, v in reg.items()}}))
+                continue
+            # 來賓沒有部門：能間接存取任何限制資源都不合理，除非該資源的規則明確允許來賓
+            by_root: dict[str, list[str]] = defaultdict(list)
+            for gid, roots in reach(uid).items():
+                rule = policy["resources"].get(gname.get(gid))
+                if rule and not rule.get("guests"):
+                    for root in roots:
+                        by_root[root].append(gname[gid])
+            for root, res in by_root.items():
+                out.append(Finding("guest_resource", "entra", upn, "remove_group_member", gname[root],
+                                   evidence={"grants": sorted(res), "guest": u.get("mail")}))
             continue
         if m.kind != "employee":
             continue

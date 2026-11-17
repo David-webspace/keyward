@@ -91,3 +91,25 @@ class Mail(Base):
     body: Mapped[str] = mapped_column(Text)
     item_ids: Mapped[list] = mapped_column(JSON, default=list)
     sent_at: Mapped[datetime] = mapped_column(DateTime)
+
+
+class Proposal(Base):
+    """規則變更提案：AI 群組標註、一句話寫規則。經程式驗證與影響預覽，IT 核准後才疊加到 policy.yaml 上生效。"""
+    __tablename__ = "policy_proposals"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    source: Mapped[str] = mapped_column(String(20))        # classifier / sentence
+    kind: Mapped[str] = mapped_column(String(20))          # group_label / resource / sod / setting / clarify
+    prompt: Mapped[str] = mapped_column(Text)              # 原始的一句話，或被標註的群組名稱
+    target: Mapped[str] = mapped_column(String(200), default="", index=True)
+    proposal: Mapped[dict] = mapped_column(JSON, default=dict)
+    rationale: Mapped[str | None] = mapped_column(Text, nullable=True)
+    evidence: Mapped[list] = mapped_column(JSON, default=list)
+    errors: Mapped[list] = mapped_column(JSON, default=list)
+    impact: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    model: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    elapsed_ms: Mapped[int] = mapped_column(Integer, default=0)
+    status: Mapped[str] = mapped_column(String(20))        # proposed / invalid / clarify / applied / rejected / reverted
+    created_by: Mapped[str] = mapped_column(String(20))
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=utcnow)
+    decided_by: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    decided_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)

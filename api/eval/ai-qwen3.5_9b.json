@@ -1,0 +1,2662 @@
+{
+ "groups": {
+  "rows": [
+   {
+    "group": "APP-Admin-Portal",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "restricted"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [
+       "IT"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "此為 IT 系統管理入口，且成員僅限 IT 部門。依據公司標準，擁有系統管理權限的群組應歸類為受限資料，以防止未經授權存取的風險。",
+    "ms": 9832,
+    "input_tokens": 1069,
+    "output_tokens": 152
+   },
+   {
+    "group": "APP-CRM",
+    "want": {
+     "owner_dept": "SALES",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "SALES",
+     "audience": {
+      "departments": [
+       "EXEC",
+       "FAE",
+       "FIN",
+       "HR",
+       "IT",
+       "LEGAL",
+       "MFG",
+       "QA",
+       "RDFW",
+       "RDHW",
+       "SALES",
+       "SC",
+       "TEST",
+       "WH"
+      ],
+      "sites": [
+       "BNH",
+       "CBI",
+       "DGN",
+       "HSC",
+       "MUC",
+       "SJC",
+       "TPE",
+       "TYN",
+       "TYO"
+      ]
+     }
+    },
+    "errors": [],
+    "rationale": "CRM 系統通常包含客戶資料、售價與合約等高度敏感資訊，依據敏感度定義需歸類為 restricted。成員包含多部門且遍佈全球據點，故允許所有部門與全局存取。",
+    "ms": 16975,
+    "input_tokens": 1107,
+    "output_tokens": 335
+   },
+   {
+    "group": "APP-EDA-Licenses",
+    "want": {
+     "owner_dept": "RDHW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [
+       "IT",
+       "RDHW",
+       "SALES",
+       "QA",
+       "SC",
+       "WH",
+       "FIN",
+       "TEST"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組管理 EDA 軟體授權，涉及軟體合約與財務投資細節。",
+    "ms": 17719,
+    "input_tokens": 1101,
+    "output_tokens": 190
+   },
+   {
+    "group": "APP-ERP-Users",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [
+     "引用的依據「App-ERP-Users」沒有出現在輸入中"
+    ],
+    "rationale": "該群組為 ERP 系統登入權限，供多個部門員工依工作需求存取一般企業資源。",
+    "ms": 13197,
+    "input_tokens": 1131,
+    "output_tokens": 247
+   },
+   {
+    "group": "APP-PLM",
+    "want": {
+     "owner_dept": "RDHW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "PLM系統是產品Lifecycle管理系統，用於內部專案管理與工程协作，屬於一般工作工具。成員主要為各部門的工程、製造與品管人員，無敏感財務或個資內容。",
+    "ms": 12837,
+    "input_tokens": 1120,
+    "output_tokens": 244
+   },
+   {
+    "group": "APP-VPN",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "general"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名為 APP-VPN，說明為 VPN 連線供員工存取網路資源，需全公司內部不同部門與據點成員共同使用。",
+    "ms": 17373,
+    "input_tokens": 1161,
+    "output_tokens": 340
+   },
+   {
+    "group": "Club-Hsinchu-Running",
+    "want": {
+     "owner_dept": "HR",
+     "sensitivity": "general"
+    },
+    "got": {
+     "sensitivity": "general",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "這是一個社團性質的群組，無成員與外部來賓，屬一般資訊用途。",
+    "ms": 15607,
+    "input_tokens": 1037,
+    "output_tokens": 124
+   },
+   {
+    "group": "Club-Taipei-Badminton",
+    "want": {
+     "owner_dept": "HR",
+     "sensitivity": "general"
+    },
+    "got": {
+     "sensitivity": "general",
+     "owner_dept": "TPE",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [
+     "擁有部門 TPE 不存在"
+    ],
+    "rationale": "這是一個非正式的社員社團，不涉及公司機密或敏感資料。由於群組在台北，故歸為台北總部 (TPE) 管理較為合適（若需明確指定部門代碼，建議使用 SC）。",
+    "ms": 17631,
+    "input_tokens": 1038,
+    "output_tokens": 124
+   },
+   {
+    "group": "Committee-ESG",
+    "want": {
+     "owner_dept": "EXEC",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "EXEC",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "該群組為 ESG 委員會，通常由高階管理層組成，用於內部決策與協調，不涉及敏感資訊外洩風險。",
+    "ms": 18284,
+    "input_tokens": 1036,
+    "output_tokens": 123
+   },
+   {
+    "group": "Committee-Welfare",
+    "want": {
+     "owner_dept": "HR",
+     "sensitivity": "general"
+    },
+    "got": {
+     "sensitivity": "general",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "職工福利委員會群組為公司一般用途，無敏感資料且目前無成員與子群組。",
+    "ms": 19810,
+    "input_tokens": 1035,
+    "output_tokens": 138
+   },
+   {
+    "group": "DL-All-Arcwell",
+    "want": {
+     "owner_dept": "HR",
+     "sensitivity": "general"
+    },
+    "got": {
+     "sensitivity": "general",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱為「全公司公告」，且說明也是「全公司公告」，代表此群組用於發布公司一般性資訊與公告，不涉及敏感資料。",
+    "ms": 19817,
+    "input_tokens": 1227,
+    "output_tokens": 225
+   },
+   {
+    "group": "EXT-Auditors",
+    "want": {
+     "owner_dept": "QA",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "LEGAL",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [
+     "沒有指定可以存取的部門",
+     "限制級群組的存取對象必須包含擁有部門"
+    ],
+    "rationale": "此群組為外部稽核人員，涉及外部稽核活動，屬於受限資料。擁有部門選法務 (LEGAL)。由於只有 restricted 才填寫可存取對象，且無法確認哪些內部部門需要給權限，故留空。",
+    "ms": 8167,
+    "input_tokens": 1040,
+    "output_tokens": 155
+   },
+   {
+    "group": "EXT-Customer-Portal",
+    "want": {
+     "owner_dept": "SALES",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [
+     "沒有指定可以存取的部門",
+     "限制級群組的存取對象必須包含擁有部門"
+    ],
+    "rationale": "這是一個外部客戶入口網站，成員主要為外部合作夥伴，包含敏感資訊存取控制需求。",
+    "ms": 8005,
+    "input_tokens": 1048,
+    "output_tokens": 152
+   },
+   {
+    "group": "EXT-Firmware-Partners",
+    "want": {
+     "owner_dept": "RDFW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "RDFW",
+     "audience": {
+      "departments": [
+       "RDFW"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組用於韌體外包夥伴存取機密資訊，包含外部人員與可能的產品開發細節。",
+    "ms": 9751,
+    "input_tokens": 1047,
+    "output_tokens": 192
+   },
+   {
+    "group": "EXT-Logistics-Partners",
+    "want": {
+     "owner_dept": "WH",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "SC",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱中的'Logistics-Partners'與說明中的'物流夥伴'顯示這是用於供應鏈合作夥伴聯繫的群組。根據敏感性定義，外部合作夥伴協作屬於'internal'類別。",
+    "ms": 8434,
+    "input_tokens": 1042,
+    "output_tokens": 160
+   },
+   {
+    "group": "Legacy-Lotus-Migration",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "general"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "TEST",
+     "audience": {
+      "departments": [
+       "TEST"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱為「Legacy-Lotus-Migration」，暗示可能與 Legacy（舊系統/軟體）及 Lotus (IBM 早期操作系統) 相關，這通常涉及系統遷移權限或機密作業。此類型群組若存在，極可能包含系統管理權限、測試環境配置或關鍵數據，屬於 restricted 範圍。",
+    "ms": 9264,
+    "input_tokens": 1037,
+    "output_tokens": 176
+   },
+   {
+    "group": "M365-Copilot-Pilot",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱與說明指出這是 M365 Copilot 的試用計畫，屬於內部員工依工作需求進行的測試與評估活動。目前成員為 0 且無外部來賓。",
+    "ms": 8053,
+    "input_tokens": 1040,
+    "output_tokens": 151
+   },
+   {
+    "group": "Old-SharePoint-Owners",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "general"
+    },
+    "got": {
+     "sensitivity": "general",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱包含\"Old\"與\"SharePoint-Owners\"，暗示已停用或過期的 SharePoint 權限管理，成員數為 0，無說明資料，符合一般測試或已停用的群組定義。",
+    "ms": 7893,
+    "input_tokens": 1037,
+    "output_tokens": 151
+   },
+   {
+    "group": "PRJ-Atlas-ERP-S4-Readiness",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "專案名稱與 ERP 準備工作相關，成員主要為 IT 部門，並包含一筆外部合作夥伴 orbital-it.example。",
+    "ms": 10106,
+    "input_tokens": 1067,
+    "output_tokens": 201
+   },
+   {
+    "group": "PRJ-Atlas-GaN-Charger-140W",
+    "want": {
+     "owner_dept": "RDHW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDHW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名包含項目編號與規格，成員來自硬體研發與品保部門於國內據點，顯示為專案開發過程中的內部溝通群組。",
+    "ms": 10039,
+    "input_tokens": 1064,
+    "output_tokens": 198
+   },
+   {
+    "group": "PRJ-Atlas-Medical-PSU",
+    "want": {
+     "owner_dept": "RDHW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDHW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "專案名稱含 'Medical' 與 'PSU'，顯示涉及醫療用品電源的開發，且成員包含硬體研發部門與業務人員，顯為內部專案團隊。",
+    "ms": 9678,
+    "input_tokens": 1062,
+    "output_tokens": 191
+   },
+   {
+    "group": "PRJ-Atlas-Tariff-Impact",
+    "want": {
+     "owner_dept": "SC",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "SC",
+     "audience": {
+      "departments": [
+       "SC"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組涉及「Tariff-Impact」關稅影響分析，屬於供應鏈專案中的敏感財務或法律相關資料。",
+    "ms": 7685,
+    "input_tokens": 1070,
+    "output_tokens": 145
+   },
+   {
+    "group": "PRJ-Aurora-VMI-Pilot",
+    "want": {
+     "owner_dept": "SC",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "SC",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱中的 \"PRJ-Aurora-VMI-Pilot\" 暗示這是一個與 VMI（供應商管理庫存）相關專案，成員全為供應鏈部門 (SC)。依據公司內部工作使用原則，此群組屬於 internal。",
+    "ms": 9328,
+    "input_tokens": 1067,
+    "output_tokens": 184
+   },
+   {
+    "group": "PRJ-Aurora-Yield-Taskforce",
+    "want": {
+     "owner_dept": "MFG",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "MFG",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱與說明顯示這是一個製造專案相關的任務小組成員集合。",
+    "ms": 8308,
+    "input_tokens": 1078,
+    "output_tokens": 158
+   },
+   {
+    "group": "PRJ-Beacon-AOI-Rollout",
+    "want": {
+     "owner_dept": "MFG",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "MFG",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [
+     "引用的依據「」沒有出現在輸入中"
+    ],
+    "rationale": "群組名稱 \"PRJ-Beacon-AOI-Rollout\" 與成員全為製造部門 (MFG) 顯示這是內部專案或設備部署相關，無外部來賓或敏感資料。",
+    "ms": 8275,
+    "input_tokens": 1064,
+    "output_tokens": 159
+   },
+   {
+    "group": "PRJ-Beacon-Budget-2027",
+    "want": {
+     "owner_dept": "FIN",
+     "sensitivity": "restricted"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "FIN",
+     "audience": {
+      "departments": [
+       "FIN"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱與說明顯示此群組用於管理 2027 年度財務預算資料，屬於高敏感度財務資訊。",
+    "ms": 8253,
+    "input_tokens": 1075,
+    "output_tokens": 156
+   },
+   {
+    "group": "PRJ-Beacon-Laptop-Refresh-2026",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "根據群組資料顯示該群組僅用於 2026 年筆記型電腦刷新型專案，成員全為 IT 部門員工且無外部來賓與機密資訊，符合內部工作使用定義。",
+    "ms": 7007,
+    "input_tokens": 1060,
+    "output_tokens": 130
+   },
+   {
+    "group": "PRJ-Beacon-Secure-Boot",
+    "want": {
+     "owner_dept": "RDFW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDFW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "屬於韌體開發專案「Beacon-Secure-Boot」，僅限韌體研發部門與業務人員存取，不含金額或個資等受限資料。",
+    "ms": 9028,
+    "input_tokens": 1057,
+    "output_tokens": 177
+   },
+   {
+    "group": "PRJ-Cobalt-Dual-Sourcing-2026",
+    "want": {
+     "owner_dept": "SC",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "SC",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "這是一個供應鏈專案群組，成員主要由供給鏈部門組成，用於內部專案協作。",
+    "ms": 10002,
+    "input_tokens": 1089,
+    "output_tokens": 196
+   },
+   {
+    "group": "PRJ-Cobalt-M365-Migration",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱涉及 M365 遷移專案，成員包含內部員工與外部來賓，屬於技術移轉工作使用。",
+    "ms": 12179,
+    "input_tokens": 1083,
+    "output_tokens": 247
+   },
+   {
+    "group": "PRJ-Cobalt-Trade-Show-APEC",
+    "want": {
+     "owner_dept": "SALES",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "SALES",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱「PRJ-Cobalt-Trade-Show-APEC」顯示為 APEC 貿易展覽專案，屬於業務推廣活動。成員主要來自 SALES 與少量 FIN，符合業務專案工作需求。外部來賓僅限於合作廠商代表，非內部敏感資訊（如薪資/個資），不需 restricted 層級。",
+    "ms": 13755,
+    "input_tokens": 1085,
+    "output_tokens": 283
+   },
+   {
+    "group": "PRJ-Comet-Reference-Design-Kit",
+    "want": {
+     "owner_dept": "FAE",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "FAE",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "此群組為應用工程部門（FAE）的專案相關資料，屬於一般內部工作溝通用途。",
+    "ms": 7978,
+    "input_tokens": 1063,
+    "output_tokens": 152
+   },
+   {
+    "group": "PRJ-Comet-WMS-Barcode",
+    "want": {
+     "owner_dept": "WH",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "SC",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組用途為作業系統 (Barcode) 的專案群組，成員多為倉儲(SC)與供應鏈部門人員，符合內部工作使用需求。",
+    "ms": 8155,
+    "input_tokens": 1072,
+    "output_tokens": 154
+   },
+   {
+    "group": "PRJ-Ember-ATE-Migration",
+    "want": {
+     "owner_dept": "TEST",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "TEST",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱與說明顯示該群組用於「測試工程專案」，成員包含 TEST 部門的測試工程師及 RDHW 開發人員，屬於內部工作協力關係。",
+    "ms": 8402,
+    "input_tokens": 1053,
+    "output_tokens": 162
+   },
+   {
+    "group": "PRJ-Ember-Talent-Review-2026",
+    "want": {
+     "owner_dept": "HR",
+     "sensitivity": "restricted"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "HR",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [
+     "沒有指定可以存取的部門",
+     "限制級群組的存取對象必須包含擁有部門"
+    ],
+    "rationale": "群組名稱包含 \"Talent-Review\"，屬於人才評估或績效考核相關資料。",
+    "ms": 6938,
+    "input_tokens": 1076,
+    "output_tokens": 125
+   },
+   {
+    "group": "PRJ-Falcon-8D-Customer-Returns",
+    "want": {
+     "owner_dept": "QA",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "QA",
+     "audience": {
+      "departments": [
+       "QA",
+       "SALES",
+       "LEGAL",
+       "IT"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組用途為「客戶退貨專案」，且包含外部稽核來賓 ke strel_audit.example 與 QA、SALES 成員，涉及產品品質問題處理。",
+    "ms": 8887,
+    "input_tokens": 1074,
+    "output_tokens": 171
+   },
+   {
+    "group": "PRJ-Falcon-EV-OBC-11kW",
+    "want": {
+     "owner_dept": "RDHW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDHW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [
+     "引用的依據「成员部門分布：RDHW 1」沒有出現在輸入中"
+    ],
+    "rationale": "此為硬體研發專案群組，主要用於 EV-OBC-11kW 專案的硬體開發資源整合與協作。",
+    "ms": 7819,
+    "input_tokens": 1056,
+    "output_tokens": 149
+   },
+   {
+    "group": "PRJ-Falcon-PMBus-Stack",
+    "want": {
+     "owner_dept": "RDFW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDFW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱顯示為專案代號 (PRJ-Falcon)，成員包含研發部門 (RDFW) 與財務部門 (FIN)，推測為專案工作相關使用。但因包含財務部門成員且無說明，故建議敏感度為 internal。",
+    "ms": 9548,
+    "input_tokens": 1056,
+    "output_tokens": 188
+   },
+   {
+    "group": "PRJ-Glacier-Pricing-Review-2027",
+    "want": {
+     "owner_dept": "SALES",
+     "sensitivity": "restricted"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "FIN",
+     "audience": {
+      "departments": [
+       "FIN",
+       "SALES"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱包含 'Pricing-Review'，且成員包含 FIN 與 SALES 部門及外部來賓，推測涉及價格檢討與財務敏感資料。",
+    "ms": 9339,
+    "input_tokens": 1098,
+    "output_tokens": 180
+   },
+   {
+    "group": "PRJ-Glacier-Test-Data-Lake",
+    "want": {
+     "owner_dept": "TEST",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "TEST",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組用於測試工程專案之測試數據湖，成員與據點分布顯示為內部工作使用。",
+    "ms": 8886,
+    "input_tokens": 1061,
+    "output_tokens": 173
+   },
+   {
+    "group": "PRJ-Glacier-Zero-Trust-Network",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [
+       "IT"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名包含Zero-Trust-Network關鍵字，屬網路架構關鍵資訊且成員全為IT部門，可能涉及系統管理權限或基礎設施配置，符合restricted定義。",
+    "ms": 9051,
+    "input_tokens": 1068,
+    "output_tokens": 177
+   },
+   {
+    "group": "PRJ-Harbor-Calibration-Tool",
+    "want": {
+     "owner_dept": "RDFW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDFW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱 PRJ-Harbor-Calibration-Tool 顯示為專案工具，成員包含 RDFW 與 QA，用於一般工作協作。",
+    "ms": 7953,
+    "input_tokens": 1063,
+    "output_tokens": 151
+   },
+   {
+    "group": "PRJ-Harbor-ISO14001-Renewal",
+    "want": {
+     "owner_dept": "QA",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "general",
+     "owner_dept": "QA",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "ISO 14001 環境管理系統 renewals 通常為一般內部工作文件，不需高度保密。",
+    "ms": 7969,
+    "input_tokens": 1086,
+    "output_tokens": 149
+   },
+   {
+    "group": "PRJ-Harbor-Lean-TYN-2026",
+    "want": {
+     "owner_dept": "MFG",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "MFG",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱包含 PRJ-Harbor-Lean-TYN-2026，顯示為專案相關使用，成員部門分布含製造與硬體研發，符合內部工作使用性質。",
+    "ms": 10191,
+    "input_tokens": 1082,
+    "output_tokens": 200
+   },
+   {
+    "group": "PRJ-Helix-Audit-FY2025",
+    "want": {
+     "owner_dept": "FIN",
+     "sensitivity": "restricted"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "FIN",
+     "audience": {
+      "departments": [
+       "FIN"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱含有 Audit 關鍵字且說明明確標註財務專案，屬於年度審計專案，涉及敏感財務資料需嚴格管控。",
+    "ms": 8227,
+    "input_tokens": 1071,
+    "output_tokens": 158
+   },
+   {
+    "group": "PRJ-Helix-Bootloader-v3",
+    "want": {
+     "owner_dept": "RDFW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDFW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "此為韌體研發專案「Bootloader-v3」，主要成員來自 RDFW 韌體研發團隊，用於內部專案開發與測試。",
+    "ms": 7876,
+    "input_tokens": 1079,
+    "output_tokens": 146
+   },
+   {
+    "group": "PRJ-Helix-LED-Driver-Gen4",
+    "want": {
+     "owner_dept": "RDHW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "RDHW",
+     "audience": {
+      "departments": [
+       "RDHW",
+       "TEST"
+      ],
+      "sites": [
+       "HSC"
+      ]
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱「PRJ-Helix-LED-Driver-Gen4」顯示為第四代 LED 驅動器專案，說明中無一般性內容。成員部門主要為 RDHW（硬體研發）與 TEST（測試工程），外部來賓來自 brightline-design.example。",
+    "ms": 10003,
+    "input_tokens": 1057,
+    "output_tokens": 199
+   },
+   {
+    "group": "PRJ-Helix-Transfer-Pricing",
+    "want": {
+     "owner_dept": "FIN",
+     "sensitivity": "restricted"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "FIN",
+     "audience": {
+      "departments": [
+       "FIN"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱與說明皆涉及Transfer-Pricing（轉帳價格），屬於高度敏感財務議題。成員主要來自財務部門 (FIN)，且內容可能涉及稅務或法規遵循的財務數據。",
+    "ms": 8942,
+    "input_tokens": 1056,
+    "output_tokens": 173
+   },
+   {
+    "group": "PRJ-Juniper-Customer-Lab-Tours",
+    "want": {
+     "owner_dept": "FAE",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "FAE",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組用於 Juniper 客戶的 Lab Tours（實驗室參訪）活動，成員包含負責協作的 FAE 與 TEST 部門，且無外部來賓公司資訊顯示為一般內部專案使用。",
+    "ms": 12667,
+    "input_tokens": 1066,
+    "output_tokens": 258
+   },
+   {
+    "group": "PRJ-Juniper-Fan-Control",
+    "want": {
+     "owner_dept": "RDFW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "RDFW",
+     "audience": {
+      "departments": [
+       "EXEC",
+       "RDFW"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組包含外部廠商成員且可能涉及系統配置資訊",
+    "ms": 7883,
+    "input_tokens": 1061,
+    "output_tokens": 149
+   },
+   {
+    "group": "PRJ-Juniper-PSU-650W",
+    "want": {
+     "owner_dept": "RDHW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDHW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱含有 'PRJ' 開頭代表專案開發，成員包含硬體研發與供應鏈部門，且有外部合作來賓參與，屬於跨部門協作的工作群組。",
+    "ms": 17083,
+    "input_tokens": 1063,
+    "output_tokens": 362
+   },
+   {
+    "group": "PRJ-Kestrel-EU-Distributor-Onboarding",
+    "want": {
+     "owner_dept": "SALES",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "SALES",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱與說明顯示這是針對歐洲經銷商的入程系統，成員主要來自 SALES 部門，用於業務協作與供應商整合。",
+    "ms": 8626,
+    "input_tokens": 1074,
+    "output_tokens": 163
+   },
+   {
+    "group": "PRJ-Kestrel-Fixture-Library",
+    "want": {
+     "owner_dept": "TEST",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "TEST",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "屬於內部一般專案用途，與測試工程和硬體研發相關。",
+    "ms": 7002,
+    "input_tokens": 1053,
+    "output_tokens": 130
+   },
+   {
+    "group": "PRJ-Kestrel-IATF-Audit-2026",
+    "want": {
+     "owner_dept": "QA",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "QA",
+     "audience": {
+      "departments": [
+       "QA",
+       "WH"
+      ],
+      "sites": [
+       "BNH",
+       "TYN",
+       "DGN",
+       "MUC"
+      ]
+     }
+    },
+    "errors": [],
+    "rationale": "群組名與說明包含「IATF-Audit-2026」，顯示此為稽核專案群組，通常涉及內部審計或外部驗證相關敏感資料。成員含 QA 與 WH，且位於多據點，符合受限存取原則，建議敏感度為「restricted」。",
+    "ms": 11864,
+    "input_tokens": 1088,
+    "output_tokens": 238
+   },
+   {
+    "group": "PRJ-Lumen-CBI-Line-Ramp",
+    "want": {
+     "owner_dept": "MFG",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "MFG",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "這是一個專門用於製造專案 CBI-Line-Ramp 的群組，成員主要是 MFG 部門員工，也有少量 SALES 與 FIN 人員參與，屬於內部工作使用。",
+    "ms": 10012,
+    "input_tokens": 1082,
+    "output_tokens": 196
+   },
+   {
+    "group": "PRJ-Lumen-Design-In-Support",
+    "want": {
+     "owner_dept": "FAE",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "general",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "這是一個沒有說明，僅包含少量內部與外部成員的群組，可能用於一般性的專案支援或測試用途，資料敏感度低。",
+    "ms": 8028,
+    "input_tokens": 1055,
+    "output_tokens": 152
+   },
+   {
+    "group": "PRJ-Lumen-SMT-Line-Upgrade",
+    "want": {
+     "owner_dept": "MFG",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "MFG",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱包含 SMT-Line-Upgrade，顯示為製造線升級專案，成員主要來自製造與品質確保部門，符合內部工作使用屬性。",
+    "ms": 9116,
+    "input_tokens": 1067,
+    "output_tokens": 177
+   },
+   {
+    "group": "PRJ-Nimbus-CRM-Cleanup",
+    "want": {
+     "owner_dept": "SALES",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "SALES",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "這是由 SALES 部門為業務專案（CRM-Cleanup）建立的內部工作群組，目前成員主要集中在 SALES 部門。",
+    "ms": 9677,
+    "input_tokens": 1069,
+    "output_tokens": 190
+   },
+   {
+    "group": "PRJ-Nimbus-Reliability-Lab",
+    "want": {
+     "owner_dept": "QA",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "QA",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "此為品保部門(QA)內部的可靠性實驗室專案，用於一般內部工作與測試，不涉及限制級機密資料。",
+    "ms": 17060,
+    "input_tokens": 1072,
+    "output_tokens": 357
+   },
+   {
+    "group": "PRJ-Nimbus-Supplier-Quality-Scorecard",
+    "want": {
+     "owner_dept": "QA",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "QA",
+     "audience": {
+      "departments": [
+       "QA"
+      ],
+      "sites": [
+       "BNH",
+       "DGN",
+       "TYN",
+       "CBI"
+      ]
+     }
+    },
+    "errors": [
+     "引用的依據「成員名稱：PRJ-Nimbus-Supplier-Quality-Scorecard」沒有出現在輸入中"
+    ],
+    "rationale": "群組名稱中的\"Supplier-Quality-Scorecard\"與成員分布顯示用於供應商品質評分表管理，可能涉及供應商績效評估、財務風險或商業機密。依據公司資安政策，未標註且涉及外部來賓（kestrel-audit.example）的群組應以 restricted 處理以確保資料不致外洩。",
+    "ms": 12547,
+    "input_tokens": 1070,
+    "output_tokens": 255
+   },
+   {
+    "group": "PRJ-Orion-Adapter-USB-PD",
+    "want": {
+     "owner_dept": "RDHW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDHW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "這是一個硬體研發專案群組，成員全為 RDHW 部門且位於 HSC 據點，屬於內部專案工作使用。",
+    "ms": 8281,
+    "input_tokens": 1053,
+    "output_tokens": 158
+   },
+   {
+    "group": "PRJ-Orion-CBI-Hiring-Wave",
+    "want": {
+     "owner_dept": "HR",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "HR",
+     "audience": {
+      "departments": [
+       "HR"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱與說明顯示與人資招聘專案相關，內含人資敏感作業與外部來賓資訊。",
+    "ms": 9482,
+    "input_tokens": 1089,
+    "output_tokens": 184
+   },
+   {
+    "group": "PRJ-Orion-Telemetry-Agent",
+    "want": {
+     "owner_dept": "RDFW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "RDFW",
+     "audience": {
+      "departments": [
+       "RDFW"
+      ],
+      "sites": [
+       "HSC"
+      ]
+     }
+    },
+    "errors": [],
+    "rationale": "專案名稱與功能顯示為韌體開發相關，屬核心研發資訊。成員僅包含 RDFW 部門人員且位於 HSC 據點，符合受限存取原則。",
+    "ms": 9967,
+    "input_tokens": 1052,
+    "output_tokens": 198
+   },
+   {
+    "group": "PRJ-Quartz-Burn-in-Automation",
+    "want": {
+     "owner_dept": "TEST",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "TEST",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱包含 \"Burn-in-Automation\"，說明此為內部自動化工具或專案。成員皆為 TEST 部門位於 HSC 據點，符合內部工作使用需求。",
+    "ms": 8270,
+    "input_tokens": 1046,
+    "output_tokens": 159
+   },
+   {
+    "group": "PRJ-Quartz-OTA-Update",
+    "want": {
+     "owner_dept": "RDFW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "RDFW",
+     "audience": {
+      "departments": [
+       "RDFW"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "韌體研發專案涉及系統更新與技術細節，屬敏感資料。成員主要來自 RDFW 研發部門，外部來賓可能存取受限。",
+    "ms": 9381,
+    "input_tokens": 1087,
+    "output_tokens": 181
+   },
+   {
+    "group": "PRJ-Quartz-Supplier-Portal",
+    "want": {
+     "owner_dept": "SC",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "SC",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "支援供應鏈管理與供應商協作",
+    "ms": 7707,
+    "input_tokens": 1064,
+    "output_tokens": 145
+   },
+   {
+    "group": "PRJ-Sierra-Japan-Auto-Tier1",
+    "want": {
+     "owner_dept": "SALES",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "SALES",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "這是一個業務專案群組，名稱中包含 'PRJ' 與 'SALES'，說明欄位也標示為「業務專案：Japan-Auto-Tier1」，主要成員部門包含 SALES 與 SC，據點分佈涵蓋日本、美國、德國台灣等地，符合內部工作用途。",
+    "ms": 11245,
+    "input_tokens": 1084,
+    "output_tokens": 224
+   },
+   {
+    "group": "PRJ-Sierra-Key-Account-Hyperscaler",
+    "want": {
+     "owner_dept": "SALES",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "SALES",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "這是一個業務專案群組，用於 Key-Account-Hyperscaler 相關專案合作，成員包含業務（SALES）、研發（RDHW）與品保（QA），需跨部門協作進行專案交付。外部來賓僅限特定廠商參與專案協同作業，屬於一般內部工作使用範圍。",
+    "ms": 10431,
+    "input_tokens": 1101,
+    "output_tokens": 204
+   },
+   {
+    "group": "PRJ-Sierra-MES-Upgrade",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組屬於資訊專案 MES 升級，成員包含 IT、SALES、FIN 部門與外部合作夥伴 orbital-it.example，用於內部專案協作。",
+    "ms": 9184,
+    "input_tokens": 1081,
+    "output_tokens": 176
+   },
+   {
+    "group": "PRJ-Titan-HiPot-Station",
+    "want": {
+     "owner_dept": "TEST",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "TEST",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱為 'PRJ-Titan-HiPot-Station'，說明為 '測試工程專案：HiPot-Station'，符合內部工作使用之性質；成員包含測試工程(SC)、測試工程(TEST)與硬體研發(RDHW)，顯示多部門協作。",
+    "ms": 10268,
+    "input_tokens": 1068,
+    "output_tokens": 204
+   },
+   {
+    "group": "PRJ-Titan-Server-PSU-3kW",
+    "want": {
+     "owner_dept": "RDHW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDHW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "屬於 PRJ-Titan-Server 專案伺服器 PSU 3kW 相關群組，主要成員來自 RDHW（硬體研發），部分成員來自 SALES 與 FIN。",
+    "ms": 7676,
+    "input_tokens": 1068,
+    "output_tokens": 145
+   },
+   {
+    "group": "PRJ-Titan-Warehouse-Layout-TYN",
+    "want": {
+     "owner_dept": "WH",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "WH",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱「Warehouse-Layout-TYN」與成員部門分布顯示該群組主要用於倉儲佈局工作，屬內部業務需求；雖有少量測試工程人員參與及外部合作夥伴 sunfield-logistics.example，但不涉及受監管敏感資料。",
+    "ms": 7952,
+    "input_tokens": 1078,
+    "output_tokens": 147
+   },
+   {
+    "group": "PRJ-Vega-DC-DC-Brick",
+    "want": {
+     "owner_dept": "RDHW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDHW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [
+     "引用的依據「」沒有出現在輸入中"
+    ],
+    "rationale": "群組包含專案名稱，屬於一般專案開發或專案管理用途。成員部門與據點分布顯示為內部員工參與，雖有外部來賓但不涉及敏感資料類型。",
+    "ms": 8957,
+    "input_tokens": 1062,
+    "output_tokens": 173
+   },
+   {
+    "group": "PRJ-Vega-Solar-Microinverter",
+    "want": {
+     "owner_dept": "RDHW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDHW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組包含硬體研發與測試工程部門成員，且據點集中在新竹研發中心，屬內部專案工作使用。",
+    "ms": 8722,
+    "input_tokens": 1056,
+    "output_tokens": 169
+   },
+   {
+    "group": "PRJ-Vega-Telecom-Rectifier",
+    "want": {
+     "owner_dept": "RDHW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDHW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [
+     "引用的依據「[\"名稱 PRJ-Vega-Telecom-Rectifier 中的 'PRJ' 表示專案\",'說明欄位提及 '硬體研發專案：Telecom-Rectifier']\", \"成員部門分布一行列出 'RDHW 7、SALES 1、QA 1'\"]」沒有出現在輸入中"
+    ],
+    "rationale": "此群組屬於硬體研發專案「Telecom-Rectifier」，主要成員為 RDHW、部分 SALES 與 QA，屬內部專案工作使用。",
+    "ms": 9950,
+    "input_tokens": 1077,
+    "output_tokens": 195
+   },
+   {
+    "group": "PRJ-Zephyr-Digital-Control-Loop",
+    "want": {
+     "owner_dept": "RDFW",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "RDFW",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱顯示為專案 (PRJ)，屬於一般內部工作相關的系統登入或專案討論，且成員僅限於 RDFW 硬體與韌體研發部門與 HSC 新竹據點，不含敏感資料類型。",
+    "ms": 9515,
+    "input_tokens": 1055,
+    "output_tokens": 186
+   },
+   {
+    "group": "PRJ-Zephyr-Export-Control-Review",
+    "want": {
+     "owner_dept": "LEGAL",
+     "sensitivity": "restricted"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "LEGAL",
+     "audience": {
+      "departments": [
+       "EXEC",
+       "LEGAL",
+       "SALES"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱與說明均含「Export-Control」關鍵字，涉及出口管制相關審查，屬於高度敏感資料。成員多為法務部人員及外部法律顧問，符合機密性與跨部門協作特性。",
+    "ms": 9789,
+    "input_tokens": 1057,
+    "output_tokens": 194
+   },
+   {
+    "group": "PRJ-Zephyr-Kaizen-DGN",
+    "want": {
+     "owner_dept": "MFG",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "MFG",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱包含 \"PRJ\" 與 \"Kaizen\" 關鍵字，顯示為專案性質；成員全為製造部門 (MFG)，涵蓋多個據點，符合內部工作使用需求。",
+    "ms": 10278,
+    "input_tokens": 1064,
+    "output_tokens": 205
+   },
+   {
+    "group": "SG-Intern-2026",
+    "want": {
+     "owner_dept": "HR",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "general",
+     "owner_dept": "SALES",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱為 \"2026 實習生\"，推測為招募或管理該年度實習生的公告性群組。因目前無成員且用途偏重一般資訊發布，歸類為一般資料。",
+    "ms": 8249,
+    "input_tokens": 1042,
+    "output_tokens": 157
+   },
+   {
+    "group": "SG-Kiosk-Devices",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "general",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組說明提及「產線共用機台」，屬於一般設備管理用途；成員數為零且無外部來賓或子群組。",
+    "ms": 7921,
+    "input_tokens": 1037,
+    "output_tokens": 153
+   },
+   {
+    "group": "SG-Laptop-Pilot",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱包含 \"Pilot\"，推測用於內部測試或試跑專案；目前無成員，建議預設為 internal 以防未授權存取。",
+    "ms": 10457,
+    "input_tokens": 1036,
+    "output_tokens": 211
+   },
+   {
+    "group": "SG-Mobile-Devices",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [
+     "引用的依據「群組名稱為'SG-Mobile-Devices'」沒有出現在輸入中",
+     "引用的依據「說明為'公務手機'」沒有出現在輸入中"
+    ],
+    "rationale": "群組名稱為'公務手機'，說明為'公務手機'、成員人數（含子群組）：0、成員部門分布：無、成員據點分布：無、外部來賓所屬公司：無、直接包含的子群組：無、被以下群組包含：無",
+    "ms": 18517,
+    "input_tokens": 1033,
+    "output_tokens": 388
+   },
+   {
+    "group": "SG-Printers-HSC",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "general"
+    },
+    "got": {
+     "sensitivity": "general",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [
+     "引用的依據「名稱中的'HSC'指向新竹研發中心」沒有出現在輸入中",
+     "引用的依據「說明為'新竹印表機'」沒有出現在輸入中"
+    ],
+    "rationale": "這是一個一般用途的印表機共用群組，無成員且為測試或已停用狀態的可能性較高。",
+    "ms": 8073,
+    "input_tokens": 1037,
+    "output_tokens": 153
+   },
+   {
+    "group": "SG-Printers-TPE",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "general"
+    },
+    "got": {
+     "sensitivity": "general",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱 'SG-Printers-TPE' 與說明 '台北印表機' 顯示為一般設備用途，無敏感資料。",
+    "ms": 7447,
+    "input_tokens": 1037,
+    "output_tokens": 139
+   },
+   {
+    "group": "SG-Remote-Workers",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [
+     "引用的依據「群組名稱: SG-Singapore-Remote-Workers」沒有出現在輸入中"
+    ],
+    "rationale": "群組名稱「SG-Singapore-Remote-Workers」與說明「遠端工作」顯示為內部作業使用，不涉及敏感資料。目前無成員或外部來賓，僅用於設定遠端存取權限或未來擴展。",
+    "ms": 8964,
+    "input_tokens": 1035,
+    "output_tokens": 175
+   },
+   {
+    "group": "SG-Visitors-TPE",
+    "want": {
+     "owner_dept": "HR",
+     "sensitivity": "general"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱為訪客群組，僅限台北總部使用。",
+    "ms": 7870,
+    "input_tokens": 1036,
+    "output_tokens": 151
+   },
+   {
+    "group": "TMP-CBI-Launch",
+    "want": {
+     "owner_dept": "MFG",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "MFG",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "該群組為泰國新廠開站暫用，比照桃園廠範本，符合內部工作使用之敏感性；擁有部門為製造。",
+    "ms": 8105,
+    "input_tokens": 1076,
+    "output_tokens": 152
+   },
+   {
+    "group": "Temp-Audit-2025",
+    "want": {
+     "owner_dept": "FIN",
+     "sensitivity": "restricted"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [
+       "IT"
+      ],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱包含 Audit，且用於系統管理權限或稽核用途，符合 restricted 敏感度的定義（系統管理權限、稽核）。",
+    "ms": 7202,
+    "input_tokens": 1039,
+    "output_tokens": 137
+   },
+   {
+    "group": "Test-Group-1",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "general"
+    },
+    "got": {
+     "sensitivity": "general",
+     "owner_dept": "TEST",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": null,
+    "ms": 5732,
+    "input_tokens": 1036,
+    "output_tokens": 101
+   },
+   {
+    "group": "Test-Group-2",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "general"
+    },
+    "got": {
+     "sensitivity": "general",
+     "owner_dept": "TEST",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組名稱包含 \"Test\"，成員人數為 0，無任何部門或據點分布資料",
+    "ms": 6291,
+    "input_tokens": 1036,
+    "output_tokens": 114
+   },
+   {
+    "group": "Training-ISO27001-2026",
+    "want": {
+     "owner_dept": "IT",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "internal",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [],
+      "sites": []
+     }
+    },
+    "errors": [],
+    "rationale": "群組用途為 ISO27001 資安教育訓練，屬於公司内部工作使用，符合 internal 敏感度定義，由 IT 部門負責管理。",
+    "ms": 9775,
+    "input_tokens": 1044,
+    "output_tokens": 193
+   },
+   {
+    "group": "Training-Safety-TYN",
+    "want": {
+     "owner_dept": "MFG",
+     "sensitivity": "internal"
+    },
+    "got": {
+     "sensitivity": "restricted",
+     "owner_dept": "IT",
+     "audience": {
+      "departments": [
+       "IT"
+      ],
+      "sites": [
+       "TYN"
+      ]
+     }
+    },
+    "errors": [],
+    "rationale": "工安訓練通常涉及安全作業程序與違規懲處，可能納入人事檔案或法律規範，需嚴格存取控制。",
+    "ms": 7218,
+    "input_tokens": 1037,
+    "output_tokens": 136
+   }
+  ],
+  "total": 92,
+  "invalid": 13,
+  "owner_correct": 73,
+  "sensitivity_correct": 69,
+  "restricted_total": 8,
+  "restricted_found": 7,
+  "restricted_missed": [],
+  "over_restricted": [
+   "APP-CRM",
+   "APP-EDA-Licenses",
+   "EXT-Auditors",
+   "EXT-Customer-Portal",
+   "EXT-Firmware-Partners",
+   "Legacy-Lotus-Migration",
+   "PRJ-Atlas-Tariff-Impact",
+   "PRJ-Falcon-8D-Customer-Returns",
+   "PRJ-Glacier-Zero-Trust-Network",
+   "PRJ-Helix-LED-Driver-Gen4",
+   "PRJ-Juniper-Fan-Control",
+   "PRJ-Kestrel-IATF-Audit-2026",
+   "PRJ-Nimbus-Supplier-Quality-Scorecard",
+   "PRJ-Orion-CBI-Hiring-Wave",
+   "PRJ-Orion-Telemetry-Agent",
+   "PRJ-Quartz-OTA-Update",
+   "Training-Safety-TYN"
+  ],
+  "hidden_found": 3,
+  "hidden_total": 3,
+  "new_findings": 34
+ },
+ "sentences": {
+  "rows": [
+   {
+    "text": "薪資資料只有台北的人資和財務能看",
+    "want": {
+     "action": "resource",
+     "group": "RES-Payroll",
+     "departments": [
+      "FIN",
+      "HR"
+     ],
+     "sites": [
+      "TPE"
+     ]
+    },
+    "got": {
+     "action": "resource",
+     "group": "RES-Payroll",
+     "departments": [
+      "FIN",
+      "HR"
+     ],
+     "sites": [
+      "TPE"
+     ]
+    },
+    "errors": [],
+    "ms": 6746,
+    "correct": true,
+    "input_tokens": 3635,
+    "output_tokens": 97
+   },
+   {
+    "text": "董事會資料只限經營管理部門存取",
+    "want": {
+     "action": "resource",
+     "group": "RES-Board-Materials",
+     "departments": [
+      "EXEC"
+     ],
+     "sites": []
+    },
+    "got": {
+     "action": "resource",
+     "group": "RES-Board-Materials",
+     "departments": [
+      "EXEC"
+     ],
+     "sites": []
+    },
+    "errors": [],
+    "ms": 5601,
+    "correct": true,
+    "input_tokens": 3634,
+    "output_tokens": 79
+   },
+   {
+    "text": "人事檔案只有人資可以看",
+    "want": {
+     "action": "resource",
+     "group": "RES-HR-Records",
+     "departments": [
+      "HR"
+     ],
+     "sites": []
+    },
+    "got": {
+     "action": "resource",
+     "group": "RES-HR-Records",
+     "departments": [
+      "HR"
+     ],
+     "sites": []
+    },
+    "errors": [],
+    "ms": 5623,
+    "correct": true,
+    "input_tokens": 3631,
+    "output_tokens": 79
+   },
+   {
+    "text": "供應商合約只開放給供應鏈、法務和財務",
+    "want": {
+     "action": "resource",
+     "group": "RES-Supplier-Contracts",
+     "departments": [
+      "FIN",
+      "LEGAL",
+      "SC"
+     ],
+     "sites": []
+    },
+    "got": {
+     "action": "resource",
+     "group": "RES-Supplier-Contracts",
+     "departments": [
+      "FIN",
+      "LEGAL",
+      "SC"
+     ],
+     "sites": []
+    },
+    "errors": [],
+    "ms": 8122,
+    "correct": true,
+    "input_tokens": 3636,
+    "output_tokens": 135
+   },
+   {
+    "text": "2027 年預算專案只有財務和經營管理可以參與",
+    "want": {
+     "action": "resource",
+     "group": "PRJ-Beacon-Budget-2027",
+     "departments": [
+      "EXEC",
+      "FIN"
+     ],
+     "sites": []
+    },
+    "got": {
+     "action": "resource",
+     "group": "PRJ-Beacon-Budget-2027",
+     "departments": [
+      "EXEC",
+      "FIN"
+     ],
+     "sites": []
+    },
+    "errors": [],
+    "ms": 6299,
+    "correct": true,
+    "input_tokens": 3640,
+    "output_tokens": 95
+   },
+   {
+    "text": "移轉訂價專案限財務部",
+    "want": {
+     "action": "resource",
+     "group": "PRJ-Helix-Transfer-Pricing",
+     "departments": [
+      "FIN"
+     ],
+     "sites": []
+    },
+    "got": {
+     "action": "resource",
+     "group": "PRJ-Helix-Transfer-Pricing",
+     "departments": [
+      "FIN"
+     ],
+     "sites": []
+    },
+    "errors": [],
+    "ms": 5758,
+    "correct": true,
+    "input_tokens": 3633,
+    "output_tokens": 82
+   },
+   {
+    "text": "2027 定價檢討專案只限業務和財務",
+    "want": {
+     "action": "resource",
+     "group": "PRJ-Glacier-Pricing-Review-2027",
+     "departments": [
+      "FIN",
+      "SALES"
+     ],
+     "sites": []
+    },
+    "got": {
+     "action": "clarify"
+    },
+    "errors": [],
+    "ms": 6392,
+    "correct": false,
+    "input_tokens": 3638,
+    "output_tokens": 96
+   },
+   {
+    "text": "2026 人才盤點專案只有人資和經營管理能看",
+    "want": {
+     "action": "resource",
+     "group": "PRJ-Ember-Talent-Review-2026",
+     "departments": [
+      "EXEC",
+      "HR"
+     ],
+     "sites": []
+    },
+    "got": {
+     "action": "resource",
+     "group": "PRJ-Ember-Talent-Review-2026",
+     "departments": [
+      "EXEC",
+      "HR"
+     ],
+     "sites": []
+    },
+    "errors": [],
+    "ms": 6467,
+    "correct": true,
+    "input_tokens": 3642,
+    "output_tokens": 99
+   },
+   {
+    "text": "出口管制審查專案只限法務",
+    "want": {
+     "action": "resource",
+     "group": "PRJ-Zephyr-Export-Control-Review",
+     "departments": [
+      "LEGAL"
+     ],
+     "sites": []
+    },
+    "got": {
+     "action": "resource",
+     "group": "PRJ-Zephyr-Export-Control-Review",
+     "departments": [
+      "LEGAL"
+     ],
+     "sites": []
+    },
+    "errors": [],
+    "ms": 6642,
+    "correct": true,
+    "input_tokens": 3633,
+    "output_tokens": 102
+   },
+   {
+    "text": "IT 管理入口只能給資訊部",
+    "want": {
+     "action": "resource",
+     "group": "APP-Admin-Portal",
+     "departments": [
+      "IT"
+     ],
+     "sites": []
+    },
+    "got": {
+     "action": "resource",
+     "group": "APP-Admin-Portal",
+     "departments": [
+      "IT"
+     ],
+     "sites": []
+    },
+    "errors": [],
+    "ms": 5536,
+    "correct": true,
+    "input_tokens": 3633,
+    "output_tokens": 78
+   },
+   {
+    "text": "財務 Power BI 報表只有財務能看",
+    "want": {
+     "action": "resource",
+     "group": "APP-PowerBI-Finance",
+     "departments": [
+      "FIN"
+     ],
+     "sites": []
+    },
+    "got": {
+     "action": "resource",
+     "group": "APP-PowerBI-Finance",
+     "departments": [
+      "FIN"
+     ],
+     "sites": []
+    },
+    "errors": [],
+    "ms": 5661,
+    "correct": true,
+    "input_tokens": 3635,
+    "output_tokens": 80
+   },
+   {
+    "text": "桃園廠的 MES 只開放給桃園廠的製造和品保",
+    "want": {
+     "action": "resource",
+     "group": "APP-MES-TYN",
+     "departments": [
+      "MFG",
+      "QA"
+     ],
+     "sites": [
+      "TYN"
+     ]
+    },
+    "got": {
+     "action": "resource",
+     "group": "APP-MES-TYN",
+     "departments": [
+      "MFG",
+      "QA"
+     ],
+     "sites": [
+      "TYN"
+     ]
+    },
+    "errors": [],
+    "ms": 6283,
+    "correct": true,
+    "input_tokens": 3640,
+    "output_tokens": 94
+   },
+   {
+    "text": "同一個人不能同時建立銷售訂單又開立銷貨折讓",
+    "want": {
+     "action": "sod",
+     "pair": [
+      "CREDIT_MEMO",
+      "SO_CREATE"
+     ]
+    },
+    "got": {
+     "action": "sod",
+     "pair": [
+      "CREDIT_MEMO",
+      "SO_CREATE"
+     ]
+    },
+    "errors": [],
+    "ms": 6883,
+    "correct": true,
+    "input_tokens": 3639,
+    "output_tokens": 108
+   },
+   {
+    "text": "開工單的人不能自己做生產報工",
+    "want": {
+     "action": "sod",
+     "pair": [
+      "PROD_CONFIRM",
+      "PROD_ORDER"
+     ]
+    },
+    "got": {
+     "action": "sod",
+     "pair": [
+      "PROD_CONFIRM",
+      "PROD_ORDER"
+     ]
+    },
+    "errors": [],
+    "ms": 6666,
+    "correct": true,
+    "input_tokens": 3634,
+    "output_tokens": 102
+   },
+   {
+    "text": "負責收貨的人不可以同時做庫存調整",
+    "want": {
+     "action": "sod",
+     "pair": [
+      "GR_POST",
+      "INV_ADJUST"
+     ]
+    },
+    "got": {
+     "action": "clarify"
+    },
+    "errors": [
+     "模型沒有回傳結構化結果"
+    ],
+    "ms": 22365,
+    "correct": false,
+    "input_tokens": 3634,
+    "output_tokens": 462
+   },
+   {
+    "text": "維護料號主檔和維護 BOM 不能是同一個人",
+    "want": {
+     "action": "sod",
+     "pair": [
+      "BOM_MAINT",
+      "MAT_MAINT"
+     ]
+    },
+    "got": {
+     "action": "sod",
+     "pair": [
+      "BOM_MAINT",
+      "MAT_MAINT"
+     ]
+    },
+    "errors": [],
+    "ms": 6649,
+    "correct": true,
+    "input_tokens": 3639,
+    "output_tokens": 103
+   },
+   {
+    "text": "總帳過帳和月結關帳要由不同人負責",
+    "want": {
+     "action": "sod",
+     "pair": [
+      "GL_CLOSE",
+      "GL_POST"
+     ]
+    },
+    "got": {
+     "action": "sod",
+     "pair": [
+      "GL_CLOSE",
+      "GL_POST"
+     ]
+    },
+    "errors": [],
+    "ms": 6656,
+    "correct": true,
+    "input_tokens": 3639,
+    "output_tokens": 103
+   },
+   {
+    "text": "品質凍結和品質放行不能由同一人執行",
+    "want": {
+     "action": "sod",
+     "pair": [
+      "QC_BLOCK",
+      "QC_RELEASE"
+     ]
+    },
+    "got": {
+     "action": "sod",
+     "pair": [
+      "QC_BLOCK",
+      "QC_RELEASE"
+     ]
+    },
+    "errors": [],
+    "ms": 6338,
+    "correct": true,
+    "input_tokens": 3636,
+    "output_tokens": 96
+   },
+   {
+    "text": "能維護價格的人不准核准銷售訂單",
+    "want": {
+     "action": "sod",
+     "pair": [
+      "PRICE_MAINT",
+      "SO_APPROVE"
+     ]
+    },
+    "got": {
+     "action": "sod",
+     "pair": [
+      "PRICE_MAINT",
+      "SO_APPROVE"
+     ]
+    },
+    "errors": [],
+    "ms": 6308,
+    "correct": true,
+    "input_tokens": 3633,
+    "output_tokens": 96
+   },
+   {
+    "text": "超過 60 天沒登入就算殭屍帳號",
+    "want": {
+     "action": "setting",
+     "key": "inactivity_days",
+     "value": 60
+    },
+    "got": {
+     "action": "setting",
+     "key": "inactivity_days",
+     "value": 60
+    },
+    "errors": [],
+    "ms": 5360,
+    "correct": true,
+    "input_tokens": 3638,
+    "output_tokens": 73
+   },
+   {
+    "text": "新帳號給 14 天的寬限期",
+    "want": {
+     "action": "setting",
+     "key": "new_account_grace_days",
+     "value": 14
+    },
+    "got": {
+     "action": "setting",
+     "key": "new_account_grace_days",
+     "value": 14
+    },
+    "errors": [],
+    "ms": 5340,
+    "correct": true,
+    "input_tokens": 3635,
+    "output_tokens": 73
+   },
+   {
+    "text": "轉調後舊權限最多保留 15 天",
+    "want": {
+     "action": "setting",
+     "key": "transfer_grace_days",
+     "value": 15
+    },
+    "got": {
+     "action": "setting",
+     "key": "transfer_grace_days",
+     "value": 15
+    },
+    "errors": [],
+    "ms": 5651,
+    "correct": true,
+    "input_tokens": 3638,
+    "output_tokens": 79
+   },
+   {
+    "text": "閒置帳號的標準改成 120 天",
+    "want": {
+     "action": "setting",
+     "key": "inactivity_days",
+     "value": 120
+    },
+    "got": {
+     "action": "setting",
+     "key": "inactivity_days",
+     "value": 120
+    },
+    "errors": [],
+    "ms": 5446,
+    "correct": true,
+    "input_tokens": 3637,
+    "output_tokens": 76
+   },
+   {
+    "text": "45 天未登入即視為長期未登入",
+    "want": {
+     "action": "setting",
+     "key": "inactivity_days",
+     "value": 45
+    },
+    "got": {
+     "action": "setting",
+     "key": "inactivity_days",
+     "value": 45
+    },
+    "errors": [],
+    "ms": 5271,
+    "correct": true,
+    "input_tokens": 3636,
+    "output_tokens": 71
+   },
+   {
+    "text": "那個專案的資料要管嚴一點",
+    "want": {
+     "action": "clarify"
+    },
+    "got": {
+     "action": "clarify"
+    },
+    "errors": [],
+    "ms": 5602,
+    "correct": true,
+    "input_tokens": 3633,
+    "output_tokens": 80
+   },
+   {
+    "text": "薪水相關的東西要限制",
+    "want": {
+     "action": "clarify"
+    },
+    "got": {
+     "action": "clarify"
+    },
+    "errors": [],
+    "ms": 6648,
+    "correct": true,
+    "input_tokens": 3630,
+    "output_tokens": 102
+   },
+   {
+    "text": "客戶資料只有業務能看",
+    "want": {
+     "action": "clarify"
+    },
+    "got": {
+     "action": "clarify"
+    },
+    "errors": [],
+    "ms": 5381,
+    "correct": true,
+    "input_tokens": 3631,
+    "output_tokens": 74
+   },
+   {
+    "text": "限制 Slack 頻道的存取",
+    "want": {
+     "action": "clarify"
+    },
+    "got": {
+     "action": "clarify"
+    },
+    "errors": [],
+    "ms": 5627,
+    "correct": true,
+    "input_tokens": 3631,
+    "output_tokens": 79
+   },
+   {
+    "text": "每個人的密碼要 90 天換一次",
+    "want": {
+     "action": "clarify"
+    },
+    "got": {
+     "action": "clarify"
+    },
+    "errors": [
+     "模型沒有回傳結構化結果"
+    ],
+    "ms": 5096,
+    "correct": false,
+    "input_tokens": 3636,
+    "output_tokens": 67
+   },
+   {
+    "text": "研發專案只有研發可以看",
+    "want": {
+     "action": "clarify"
+    },
+    "got": {
+     "action": "clarify"
+    },
+    "errors": [],
+    "ms": 6445,
+    "correct": true,
+    "input_tokens": 3630,
+    "output_tokens": 99
+   }
+  ],
+  "total": 30,
+  "correct": 27,
+  "by_action": {
+   "resource": {
+    "total": 12,
+    "correct": 11
+   },
+   "sod": {
+    "total": 7,
+    "correct": 6
+   },
+   "setting": {
+    "total": 5,
+    "correct": 5
+   },
+   "clarify": {
+    "total": 6,
+    "correct": 5
+   }
+  },
+  "guessed_instead_of_asking": 0
+ }
+}

@@ -24,7 +24,7 @@ from app.mailer import Mailer
 from app.models import Campaign, Event, Mail, ReviewException, ReviewItem
 
 BY_MANAGER = {"transfer_residual", "resource_access", "inactive_account", "peer_outlier", "sod_conflict"}
-BY_SPONSOR = {"guest_access", "guest_github"}
+BY_SPONSOR = {"guest_access", "guest_github", "guest_resource"}
 BY_SECURITY = {"excess_admin", "unlinked_github", "github_no_2fa"}
 DIRECT = {"terminated_enabled", "terminated_github"}
 RULE_ZH = {"transfer_residual": "轉調後舊單位權限未收回", "resource_access": "可存取不符資格的敏感資源",
@@ -32,7 +32,7 @@ RULE_ZH = {"transfer_residual": "轉調後舊單位權限未收回", "resource_a
            "sod_conflict": "ERP 職責分離衝突", "guest_access": "外部來賓存取有問題", "guest_github": "外部來賓仍有 GitHub 權限",
            "excess_admin": "不符資格的管理員角色", "unlinked_github": "無法確認是誰的 GitHub 帳號",
            "github_no_2fa": "GitHub 未開兩步驟驗證", "terminated_enabled": "已離職帳號仍啟用",
-           "terminated_github": "已離職仍在 GitHub 組織"}
+           "terminated_github": "已離職仍在 GitHub 組織", "guest_resource": "外部來賓可存取限制資源"}
 
 
 class ReviewError(Exception):
@@ -112,6 +112,9 @@ def explain(f: Finding, org: Org, group_desc: dict[str, str]) -> str:
                 f"{grants(ev['groups'])}。")
     if f.rule == "sod_conflict":
         return f"{who} 在 ERP 同時擁有 {ev['conflict']} 的權限（角色：{'、'.join(ev['roles'])}）。保留必須說明補償控制。"
+    if f.rule == "guest_resource":
+        return (f"外部來賓 {ev.get('guest') or f.account} 因為是 {f.object} 的成員，可以存取 {grants(ev['grants'])}。"
+                "來賓不應存取限制資源，除非規則明確允許。")
     if f.rule in BY_SPONSOR:
         reason = {"expired": "登記已過期", "sponsor_left": "贊助人已離職", "unregistered": "沒有任何登記"}[ev["reason"]]
         target = "GitHub 外部協作者權限" if f.rule == "guest_github" else "公司帳號"
