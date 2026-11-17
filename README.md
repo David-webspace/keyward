@@ -1,8 +1,66 @@
 # keyward
 
-跨平台帳號權限盤點助理：以 Microsoft Entra ID 為身分主軸，對照 HR 名冊，找出離職未停用、轉調未收回、過期來賓、殭屍帳號、權限過大、職責分離衝突，經主管覆核後安全地撤銷，並留下稽核證據。
+跨平台帳號權限盤點助理：以 Microsoft Entra ID 為身分主軸，把 Entra ID、GitHub、ERP 上的帳號和權限對回 HR 名冊，找出離職未停用、轉調未收回、過期來賓、殭屍帳號、權限過大、職責分離衝突。主管覆核後安全地撤銷，並留下稽核證據。
 
-> 開發中。目前完成：擬真資料產生器、Microsoft Graph 與 GitHub 的 mock、同步程式（delta 增量）、身分對應、發現規則、評測、執行引擎（核准、冪等執行、驗證、還原）、覆核流程（分派、提醒、升級、例外、交付執行）、前端工作台、稽核證據包。
+所有資料都是虛構的（Arcwell Electronics，約 650 人），Microsoft Graph 與 GitHub 由本機 mock 提供，**不需要任何雲端帳號就能完整跑起來**。
+
+## 快速開始
+
+需要：[Docker Desktop](https://www.docker.com/products/docker-desktop/)（macOS、Windows、Linux 皆可）。
+
+```bash
+git clone https://github.com/David-webspace/keyward.git
+cd keyward
+./setup.sh
+docker compose up -d --build
+```
+
+- `./setup.sh` 會產生 `.env`（隨機的密碼與 mock 憑證），已存在就略過。Windows 請在 Git Bash 或 WSL 執行。
+- 第一次建置約 2–3 分鐘。API 啟動時會自動產生擬真資料並完成第一次同步。
+
+全部起來後打開：
+
+| 網址 | 內容 |
+|---|---|
+| http://localhost:3500 | **前端**（從這裡開始） |
+| http://localhost:8027 | 通知信收件匣（Mailpit，所有信都寄到這裡，不會寄到真實信箱） |
+| http://localhost:8390/health | 覆核 API |
+| http://localhost:8391/health | Microsoft Graph 與 GitHub 的 mock |
+
+### 五分鐘導覽
+
+1. 登入頁點 **羅鈺文**（資安負責人・IT 管理者）→「覆核活動」→ 用最新同步建立並分派。系統會依主管關係分派 137 個項目，每位主管收到一封信（看 Mailpit）。
+2. 登出，回登入頁改點一位**主管**（例如財務主管劉欣涵），在「我的覆核」對吊牌選擇保留或撤銷。
+3. 換回羅鈺文，在活動頁選一個日期按「推到這天」，看到期提醒與逾期升級；再按「交付執行」、「下載 zip」取得稽核證據包。
+4. 「發現」看所有問題、「查人」看一個人在所有系統的權限，以及間接權限是經由哪個群組取得的。
+
+### 選用：開啟 AI 規則提案
+
+沒設定模型時 AI 功能會停用，其他功能照常。要開啟，在 `.env` 加上模型設定，例如接本機的 [Ollama](https://ollama.com)（先 `ollama pull qwen3.5:9b`）：
+
+```bash
+LLM_PROVIDER=openai_compatible
+LLM_BASE_URL=http://host.docker.internal:11434/v1
+LLM_MODEL=qwen3.5:9b
+LLM_REASONING_EFFORT=none
+```
+
+改用 Claude 則設 `LLM_PROVIDER=anthropic`、`LLM_MODEL`、`LLM_API_KEY`。改完執行 `docker compose up -d api` 讓設定生效。
+
+### 停止與重來
+
+```bash
+docker compose down              # 停止（資料保留）
+docker compose down -v           # 停止並清空資料庫
+```
+
+要完全回到初始狀態，再刪掉 `data/state/`（同步快照與執行帳本）。擬真資料每次啟動都會用固定種子重新產生，結果相同。
+
+### 常見問題
+
+- **連接埠被占用**：在 `.env` 改 `WEB_PORT`、`API_PORT`、`MOCK_PORT`、`DB_PORT`、`MAIL_UI_PORT`，再重新 `docker compose up -d`。
+- **建置時拉不到映像、一直逾時**：先確認 Docker Desktop 的網路與 Proxy 設定能連到 Docker Hub 與 ghcr.io。
+- **想看服務記錄**：`docker compose logs api`（或 `web`、`mock`）。
 
 ## 擬真資料
 
@@ -110,29 +168,29 @@ IT 從一次同步建立覆核活動（`POST /campaigns`），系統依 HR 主�
 - GitHub 帳號必須真人註冊，不能批次造假，所以 live 模式只驗證 API 串接，大規模成員資料使用 mock。
 - 種子腳本建立的帳號不會自己登入，live 租戶裡只有手動登入過的測試帳號有真實的 `signInActivity`。
 
-## 執行
+## 開發（不用 Docker 跑 API 與前端）
+
+需要 Python 3.12（[uv](https://docs.astral.sh/uv/)）與 Node.js 20 以上。資料庫、收信與 mock 仍用 Docker：
 
 ```bash
-cd api
-uv sync
-uv run python -m app.seed.generate   # 產生 data/synthetic/
-uv run pytest
-```
-
-啟動 mock：
-
-```bash
-./setup.sh                            # 產生 .env（隨機的 mock 憑證）
+./setup.sh
+docker compose up -d db mailpit mock
 set -a; . ./.env; set +a
-cd api && uv run uvicorn app.mock.main:default_app --factory --port 8391
+export DATABASE_URL="postgresql+psycopg://keyward:${POSTGRES_PASSWORD}@127.0.0.1:5438/keyward" SMTP_HOST=127.0.0.1 SMTP_PORT=1027
 ```
-
-前端：
 
 ```bash
-cd web && npm install && npm run dev   # http://localhost:3500，API 預設連 http://127.0.0.1:8390
+cd api && uv sync && uv run alembic upgrade head && uv run python -m app.sync && uv run uvicorn app.main:app --port 8390
 ```
 
-或使用 Docker：`./setup.sh && docker compose up -d --build`（PostgreSQL、覆核 API、前端、mock、Mailpit）。
+```bash
+cd web && npm install && npm run dev      # http://localhost:3500
+```
 
-> Docker 映像建置尚未驗證：開發機的 Docker 目前拉不到基礎映像。覆核 API 已在本機對 PostgreSQL 16 與 Mailpit 實測。
+測試不需要資料庫：
+
+```bash
+cd api && uv run pytest
+```
+
+其他指令（都在 `api/` 底下）：`uv run python -m app.seed.generate`（重新產生擬真資料）、`uv run python -m app.evals.score`（發現規則評測）、`uv run python -m app.evals.ai_eval`（AI 評測，需設定模型）、`uv run python -m app.execute --help`（執行引擎 CLI）。

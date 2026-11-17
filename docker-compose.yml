@@ -88,6 +88,7 @@ services:
     image: axllent/mailpit:v1.27
     ports:
       - "127.0.0.1:${MAIL_UI_PORT:-8027}:8025"
+      - "127.0.0.1:${MAIL_SMTP_PORT:-1027}:1025"  # 只給「不用 Docker 跑 API」的開發方式用
 
 volumes:
   pgdata:
