@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Shell } from "@/components/Shell";
 import { apiGet } from "@/lib/api";
 import { site } from "@/lib/format";
-import type { PersonHit } from "@/lib/types";
+import type { Me, PersonHit } from "@/lib/types";
 
 export default async function PeoplePage({ searchParams }: PageProps<"/people">) {
+  if (!(await apiGet<Me>("/me")).is_admin) redirect("/reviews");
   const raw = (await searchParams).q;
   const q = typeof raw === "string" ? raw.slice(0, 50) : "";
   const hits = q ? await apiGet<PersonHit[]>(`/people?q=${encodeURIComponent(q)}`) : [];
