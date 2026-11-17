@@ -1,0 +1,94 @@
+@import "tailwindcss";
+@import "@fontsource/chivo-mono/400.css";
+@import "@fontsource/chivo-mono/600.css";
+
+/* keyward：鑰匙櫃。板岩綠的櫃體、淺灰綠的掛板、黃銅色的吊牌孔與焦點。
+   顏色只表達三件事：待決定（黃銅）、保留（綠）、撤銷（紅） */
+@theme {
+  --color-board: #e7ece8;
+  --color-tag: #fbfcf9;
+  --color-cabinet: #1e2b2a;
+  --color-ink: #172120;
+  --color-muted: #5b6863;
+  --color-rule: #cbd3cd;
+  --color-brass: #a87a24;
+  --color-brass-wash: #f3e8cf;
+  --color-keep: #2e6a4e;
+  --color-keep-wash: #dcebe2;
+  --color-revoke: #9e3b2b;
+  --color-revoke-wash: #f4dfda;
+
+  --font-sans: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+  --font-tag: "Chivo Mono", ui-monospace, monospace;
+}
+
+body {
+  background: var(--color-board);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brass);
+  outline-offset: 2px;
+}
+
+/* 吊牌：左側打孔的鑰匙牌，號碼用壓印字體 */
+.tag {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  background: var(--color-tag);
+  border: 1px solid var(--color-rule);
+  border-radius: 0.375rem 1.25rem 1.25rem 0.375rem;
+  overflow: hidden;
+}
+.tag-stub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 0;
+  border-right: 1px dashed var(--color-rule);
+  background: var(--color-brass-wash);
+}
+.tag-hole {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 9999px;
+  background: var(--color-board);
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.35), 0 0 0 3px var(--color-brass);
+}
+.tag-no {
+  font-family: var(--font-tag);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  writing-mode: vertical-rl;
+  color: var(--color-muted);
+}
+.tag[data-decision="keep"] .tag-stub { background: var(--color-keep-wash); }
+.tag[data-decision="revoke"] .tag-stub,
+.tag[data-decision="partial"] .tag-stub { background: var(--color-revoke-wash); }
+
+/* 蓋章：決定後才出現 */
+.stamp {
+  position: absolute;
+  top: 0.9rem;
+  right: 1.1rem;
+  padding: 0.15rem 0.6rem;
+  border: 2px solid currentColor;
+  border-radius: 0.25rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  transform: rotate(-6deg);
+  opacity: 0.85;
+  animation: stamp 180ms ease-out;
+}
+@keyframes stamp {
+  from { transform: rotate(-6deg) scale(1.6); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stamp { animation: none; }
+}
+
+.num { font-family: var(--font-tag); font-variant-numeric: tabular-nums; }

@@ -1,0 +1,72 @@
+# IT 定義的盤點規則。發現（findings）一律由這份規則判定，模型不參與。
+
+inactivity_days: 90          # 超過幾天沒有互動式登入算殭屍帳號
+new_account_grace_days: 30   # 新帳號建立後幾天內沒登入不算
+transfer_grace_days: 30      # 轉調生效後幾天內還留著舊單位權限不算
+
+# 組織群組的命名規則：SG-{據點}-{部門}，成員應該和 HR 的現職單位一致
+org_group_pattern: "^SG-(?P<site>[A-Z]{3})-(?P<dept>[A-Z]+)$"
+
+# 同儕離群：和同部門同職稱的人比，直接加入的非組織群組裡，
+# 有幾個是同儕幾乎沒人有的（持有比例低於 rare_share）
+peer_min_size: 5
+peer_rare_share: 0.10
+peer_min_rare: 3
+
+# 單次執行超過這個筆數要額外確認，避免規則寫錯造成大規模停權
+max_batch_actions: 50
+
+# 這些帳號永遠不能被撤銷或停用，程式層面直接擋掉
+protected_accounts:
+  - bg-admin-01
+  - bg-admin-02
+
+# 敏感資源：只有符合對象的人可以有存取權（含巢狀群組帶來的間接存取）
+resources:
+  RES-Finance-Confidential: {departments: [FIN, EXEC]}
+  RES-Payroll:              {departments: [HR, FIN], sites: [TPE]}
+  RES-HR-Records:           {departments: [HR]}
+  RES-Legal-Contracts:      {departments: [LEGAL, EXEC]}
+  RES-Board-Materials:      {departments: [EXEC]}
+  RES-RD-Designs:           {departments: [RDHW, RDFW, TEST]}
+  RES-Customer-Pricing:     {departments: [SALES, FIN, EXEC]}
+  RES-Quality-Audit:        {departments: [QA]}
+  RES-Supplier-Contracts:   {departments: [SC, LEGAL, FIN]}
+  APP-PowerBI-Finance:      {departments: [FIN, EXEC]}
+  APP-MES-TYN:              {departments: [MFG, QA, WH, IT], sites: [TYN]}
+  APP-MES-DGN:              {departments: [MFG, QA, WH, IT], sites: [DGN]}
+  APP-MES-BNH:              {departments: [MFG, QA, WH, IT], sites: [BNH]}
+  APP-MES-CBI:              {departments: [MFG, QA, WH, IT], sites: [CBI]}
+
+# 目錄角色：誰可以擔任。約聘人員一律不可擔任特權角色
+privileged_roles:
+  Global Administrator:             {departments: [IT], sites: [TPE], titles: [IT Manager]}
+  Privileged Role Administrator:    {departments: [IT], sites: [TPE], titles: [IT Manager]}
+  User Administrator:               {departments: [IT], sites: [TPE]}
+  Groups Administrator:             {departments: [IT], sites: [TPE]}
+  Application Administrator:        {departments: [IT], sites: [TPE]}
+  Exchange Administrator:           {departments: [IT], sites: [TPE]}
+  SharePoint Administrator:         {departments: [IT], sites: [TPE]}
+  Helpdesk Administrator:           {departments: [IT]}
+  Security Reader:                  {departments: [IT, LEGAL]}
+
+# ERP 職責分離：同一人不可同時擁有左右兩邊的交易權限
+sod_rules:
+  SOD-01: {left: VENDOR_MAINT, right: PAY_APPROVE, zh: 維護供應商主檔 × 核准付款}
+  SOD-02: {left: PO_CREATE,    right: GR_POST,     zh: 建立採購單 × 收貨過帳}
+  SOD-03: {left: PO_CREATE,    right: PO_APPROVE,  zh: 建立採購單 × 核准採購單}
+  SOD-04: {left: AP_INVOICE,   right: PAY_RUN,     zh: 登錄應付發票 × 執行付款}
+  SOD-05: {left: CUST_MAINT,   right: CREDIT_MEMO, zh: 維護客戶主檔 × 開立銷貨折讓}
+  SOD-06: {left: GI_POST,      right: INV_ADJUST,  zh: 出貨過帳 × 庫存調整}
+  SOD-07: {left: SO_CREATE,    right: PRICE_MAINT, zh: 建立銷售訂單 × 維護價格}
+  SOD-08: {left: USER_ADMIN,   right: PAY_RUN,     zh: ERP 帳號管理 × 執行付款}
+
+# 覆核流程
+review:
+  due_days: 7               # 覆核期限
+  remind_before_days: 2     # 到期前幾天寄提醒
+  escalation_days: 3        # 升級給上一層主管後再給幾天
+  default_keep_days: 180    # 決定保留時，例外預設多久後重新檢查
+  max_keep_days: 365
+  security_owner: {site: TPE, dept: IT, title: IT Manager}     # 升級到最上層、或資安類發現的覆核者
+  admins: {site: TPE, dept: IT, titles: [IT Manager, System Engineer]}  # 可以建立活動、看全部進度、交付執行

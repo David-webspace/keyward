@@ -1,0 +1,67 @@
+# Arcwell Electronics 組織結構（虛構）。plantsight 的 3 座生產廠（桃園、東莞、越南）照舊，
+# 這裡補上集團其他據點。人數表是「現在」的狀態，轉調與離職紀錄由產生器另外推出來。
+
+as_of: 2026-11-16
+domain: arcwell.example
+company: Arcwell Electronics
+
+departments:
+  EXEC:  {zh: 經營管理, en: Executive Office}
+  FIN:   {zh: 財務, en: Finance}
+  LEGAL: {zh: 法務, en: Legal & Compliance}
+  HR:    {zh: 人資, en: Human Resources}
+  IT:    {zh: 資訊, en: Information Technology}
+  SALES: {zh: 業務, en: Sales}
+  FAE:   {zh: 應用工程, en: Field Application Engineering}
+  RDHW:  {zh: 硬體研發, en: R&D Hardware}
+  RDFW:  {zh: 韌體研發, en: R&D Firmware}
+  TEST:  {zh: 測試工程, en: Test Engineering}
+  MFG:   {zh: 製造, en: Manufacturing}
+  QA:    {zh: 品保, en: Quality}
+  SC:    {zh: 供應鏈, en: Supply Chain}
+  WH:    {zh: 倉儲物流, en: Warehouse & Logistics}
+
+# 各部門最高主管所在的據點
+dept_home:
+  EXEC: TPE
+  FIN: TPE
+  LEGAL: TPE
+  HR: TPE
+  IT: TPE
+  SALES: TPE
+  FAE: SJC
+  RDHW: HSC
+  RDFW: HSC
+  TEST: HSC
+  MFG: TYN
+  QA: TYN
+  SC: TPE
+  WH: TYN
+
+sites:
+  TPE: {name: 台北總部, en: Taipei HQ, country: TW, plant: false, headcount: {EXEC: 6, FIN: 18, LEGAL: 6, HR: 10, IT: 14, SALES: 20, SC: 16}}
+  TYN: {name: 桃園廠, en: Taoyuan Plant, country: TW, plant: true, headcount: {MFG: 80, QA: 18, WH: 14, SC: 8, HR: 4, IT: 4, FIN: 2}}
+  HSC: {name: 新竹研發中心, en: Hsinchu R&D Center, country: TW, plant: false, headcount: {RDHW: 30, RDFW: 28, TEST: 18, IT: 2, HR: 2}}
+  DGN: {name: 東莞廠, en: Dongguan Plant, country: CN, plant: true, headcount: {MFG: 72, QA: 16, WH: 14, SC: 8, HR: 4, IT: 3, FIN: 3}}
+  BNH: {name: 越南北寧廠, en: Bac Ninh Plant, country: VN, plant: true, headcount: {MFG: 66, QA: 14, WH: 12, SC: 8, HR: 4, IT: 3, FIN: 3}}
+  CBI: {name: 泰國春武里新廠, en: Chonburi Plant, country: TH, plant: true, opened: 2026-11-02, headcount: {MFG: 38, QA: 8, WH: 6, SC: 3, HR: 2, IT: 2, FIN: 1}}
+  SJC: {name: 美國聖荷西, en: San Jose Office, country: US, plant: false, headcount: {SALES: 15, FAE: 10}}
+  TYO: {name: 日本東京, en: Tokyo Office, country: JP, plant: false, headcount: {SALES: 10, FAE: 5}}
+  MUC: {name: 德國慕尼黑, en: Munich Office, country: DE, plant: false, headcount: {SALES: 10, FAE: 4, QA: 6}}
+
+# 職稱：manager 每個據點部門一位；staff 依權重抽
+titles:
+  EXEC:  {manager: Chief Executive Officer, staff: [[Vice President, 3], [Executive Assistant, 2]]}
+  FIN:   {manager: Finance Manager, staff: [[Accountant, 4], [AP Specialist, 2], [AR Specialist, 2], [Treasury Analyst, 1], [Cost Analyst, 1]]}
+  LEGAL: {manager: Legal Counsel Lead, staff: [[Legal Counsel, 3], [Compliance Specialist, 2]]}
+  HR:    {manager: HR Manager, staff: [[HR Business Partner, 2], [Payroll Specialist, 1], [Recruiter, 1]]}
+  IT:    {manager: IT Manager, staff: [[System Engineer, 3], [Helpdesk Engineer, 2], [ERP Analyst, 1], [Network Engineer, 1]]}
+  SALES: {manager: Sales Manager, staff: [[Account Manager, 4], [Sales Operations Specialist, 1], [Order Administrator, 2]]}
+  FAE:   {manager: FAE Manager, staff: [[Field Application Engineer, 1]]}
+  RDHW:  {manager: Hardware Engineering Manager, staff: [[Hardware Engineer, 4], [Layout Engineer, 1], [Component Engineer, 1]]}
+  RDFW:  {manager: Firmware Engineering Manager, staff: [[Firmware Engineer, 4], [Senior Firmware Engineer, 1]]}
+  TEST:  {manager: Test Engineering Manager, staff: [[Test Engineer, 3], [Test Automation Engineer, 1]]}
+  MFG:   {manager: Plant Manager, staff: [[Operator, 12], [Process Technician, 3], [Production Supervisor, 1], [Production Planner, 1]]}
+  QA:    {manager: Quality Manager, staff: [[Quality Engineer, 3], [QC Inspector, 4]]}
+  SC:    {manager: Supply Chain Manager, staff: [[Buyer, 4], [Material Planner, 2], [Vendor Master Specialist, 1]]}
+  WH:    {manager: Warehouse Manager, staff: [[Warehouse Clerk, 3], [Shipping Coordinator, 2], [Receiving Clerk, 2]]}

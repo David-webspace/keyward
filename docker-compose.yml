@@ -1,0 +1,76 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: keyward
+      POSTGRES_USER: keyward
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?run ./setup.sh first}
+    ports:
+      - "127.0.0.1:${DB_PORT:-5438}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keyward -d keyward"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  # 覆核 API
+  api:
+    build: ./api
+    command: ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+    environment:
+      DATABASE_URL: postgresql+psycopg://keyward:${POSTGRES_PASSWORD}@db:5432/keyward
+      JWT_SECRET: ${JWT_SECRET:?run ./setup.sh first}
+      AUTH_MODE: ${AUTH_MODE:?run ./setup.sh first}
+      DATA_DIR: /data
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
+    ports:
+      - "127.0.0.1:${API_PORT:-8390}:8000"
+    volumes:
+      - ./data:/data
+    depends_on:
+      db:
+        condition: service_healthy
+      mock:
+        condition: service_healthy
+
+  web:
+    build: ./web
+    environment:
+      API_INTERNAL_URL: http://api:8000
+    ports:
+      - "127.0.0.1:${WEB_PORT:-3500}:3000"
+    depends_on:
+      - api
+
+  # Graph 與 GitHub 的 mock：離線示範與評測用。只綁本機，不對外開放
+  mock:
+    build: ./api
+    environment:
+      DATA_DIR: /data
+      MOCK_GRAPH_READER_ID: ${MOCK_GRAPH_READER_ID:?run ./setup.sh first}
+      MOCK_GRAPH_READER_SECRET: ${MOCK_GRAPH_READER_SECRET:?run ./setup.sh first}
+      MOCK_GRAPH_WRITER_ID: ${MOCK_GRAPH_WRITER_ID:?run ./setup.sh first}
+      MOCK_GRAPH_WRITER_SECRET: ${MOCK_GRAPH_WRITER_SECRET:?run ./setup.sh first}
+      MOCK_GITHUB_READ_TOKEN: ${MOCK_GITHUB_READ_TOKEN:?run ./setup.sh first}
+      MOCK_GITHUB_ADMIN_TOKEN: ${MOCK_GITHUB_ADMIN_TOKEN:?run ./setup.sh first}
+    ports:
+      - "127.0.0.1:${MOCK_PORT:-8391}:8000"
+    volumes:
+      - ./data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  # 假信箱：所有通知信都進這裡，不會到達任何真實信箱。網頁介面 http://localhost:8027
+  mailpit:
+    image: axllent/mailpit:v1.27
+    ports:
+      - "127.0.0.1:${MAIL_UI_PORT:-8027}:8025"
+
+volumes:
+  pgdata:
