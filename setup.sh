@@ -23,6 +23,12 @@ POSTGRES_PASSWORD=$(rand)
 JWT_SECRET=$(rand)$(rand)
 # demo = 從 HR 名冊選人登入，只供本機示範
 AUTH_MODE=demo
+# 選用：AI 規則提案。沒設定就停用 AI 功能，其他功能照常。接本機 Ollama 的範例：
+# LLM_PROVIDER=openai_compatible
+# LLM_BASE_URL=http://host.docker.internal:11434/v1
+# LLM_MODEL=qwen3.5:9b
+# LLM_REASONING_EFFORT=none
+# 改用 Claude：LLM_PROVIDER=anthropic、LLM_MODEL=claude-haiku-5-5、LLM_API_KEY=...
 EOF
 chmod 600 .env
 echo "已產生 .env。接著執行：docker compose up -d --build"

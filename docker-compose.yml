@@ -18,7 +18,7 @@ services:
   # 覆核 API
   api:
     build: ./api
-    command: ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
+    command: ["sh", "start-api.sh"]
     environment:
       DATABASE_URL: postgresql+psycopg://keyward:${POSTGRES_PASSWORD}@db:5432/keyward
       JWT_SECRET: ${JWT_SECRET:?run ./setup.sh first}
@@ -26,6 +26,23 @@ services:
       DATA_DIR: /data
       SMTP_HOST: mailpit
       SMTP_PORT: "1025"
+      # 同步與執行：連同一個 compose 裡的 mock
+      KEYWARD_SOURCE: mock
+      MOCK_URL: http://mock:8000
+      MOCK_GRAPH_READER_ID: ${MOCK_GRAPH_READER_ID}
+      MOCK_GRAPH_READER_SECRET: ${MOCK_GRAPH_READER_SECRET}
+      MOCK_GRAPH_WRITER_ID: ${MOCK_GRAPH_WRITER_ID}
+      MOCK_GRAPH_WRITER_SECRET: ${MOCK_GRAPH_WRITER_SECRET}
+      MOCK_GITHUB_READ_TOKEN: ${MOCK_GITHUB_READ_TOKEN}
+      MOCK_GITHUB_ADMIN_TOKEN: ${MOCK_GITHUB_ADMIN_TOKEN}
+      # 選用：AI 規則提案。沒設定就停用 AI 功能，其他功能照常
+      LLM_PROVIDER: ${LLM_PROVIDER:-}
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+      LLM_MODEL: ${LLM_MODEL:-}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_REASONING_EFFORT: ${LLM_REASONING_EFFORT:-}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # 接本機的 Ollama 時需要
     ports:
       - "127.0.0.1:${API_PORT:-8390}:8000"
     volumes:
